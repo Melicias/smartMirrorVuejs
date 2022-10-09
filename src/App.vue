@@ -2,15 +2,16 @@
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 import MainBoard from './components/mainBoard.vue'
+import Grid from './components/grid.vue'
 </script>
 
 <template>
+    <Grid />
   <header>
    
   </header>
 
-  <main style="background-color: black">
-    <MainBoard />
+  <main >
   </main>
 </template>
 
