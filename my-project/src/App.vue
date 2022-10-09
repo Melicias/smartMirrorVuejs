@@ -1,5 +1,6 @@
 <template>
 <body>
+
     <grid-layout
             v-model:layout="layout"
             :col-num="12"
@@ -38,20 +39,23 @@
           @move="move"
           @moved="moved"
         >
-          {{ item.i + " teste" }}
+          <component :is="item.d"></component>
         </grid-item>
       </template>
     </grid-layout>
     </body>
   </template>
-  <script>
+<script>
+  import MusicPlayer from './components/MusicPlayer.vue';
   export default {
+  components: { MusicPlayer },
     name: 'App',
+    import:[MusicPlayer],
     data () {
       return {
         layout: [
-          { x: 0, y: 0, w: 2, h: 2, i: 0 },
-          { x: 2, y: 0, w: 2, h: 4, i: 1 },
+          { x: 0, y: 0, w: 2, h: 2, i: 0, d:'v-date-picker' },
+          { x: 2, y: 0, w: 2, h: 4, i: 1 ,d:'MusicPlayer'},
           { x: 4, y: 0, w: 2, h: 5, i: 2 },
           { x: 6, y: 0, w: 2, h: 3, i: 3 },
           { x: 8, y: 0, w: 2, h: 3, i: 4 },
