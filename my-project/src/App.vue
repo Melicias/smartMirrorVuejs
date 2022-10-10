@@ -2,15 +2,16 @@
 <body>
 
     <grid-layout
-            v-model:layout="layout"
-            :col-num="12"
-                     :row-height="30"
-                     :is-draggable="draggable"
-                     :is-resizable="resizable"
-                     :responsive="false"
-                     :vertical-compact="false"
-                     :prevent-collision="true"
-                     :use-css-transforms="true"
+        v-model:layout="layout"
+        :col-num="12"
+        :row-height="30"
+        :is-draggable="draggable"
+        :is-resizable="resizable"
+        :responsive="false"
+        :vertical-compact="false"
+        :prevent-collision="true"
+        :use-css-transforms="true"
+        :autoSize="true"
     >
       <template #default="{ gridItemProps }">
         <!-- | gridItemProps props from GridLayout | -->
@@ -35,9 +36,6 @@
           :w="item.w"
           :h="item.h"
           :i="item.i"
-          @resize="resize"
-          @move="move"
-          @moved="moved"
         >
           <component :is="item.d"></component>
         </grid-item>
@@ -47,24 +45,27 @@
   </template>
 <script>
   import MusicPlayer from './components/MusicPlayer.vue';
+  import WeatherWidget from './components/WeatherWidget.vue';
+  import CalendarWidget from './components/CalendarWidget.vue';
+  import TimeWidget from './components/TimeWidget.vue';
+  import NewsWidget from './components/NewsWidget.vue';
   export default {
-  components: { MusicPlayer },
+  components: { MusicPlayer, WeatherWidget, CalendarWidget, TimeWidget, NewsWidget },
     name: 'App',
-    import:[MusicPlayer],
+    import:[MusicPlayer, WeatherWidget, CalendarWidget, TimeWidget, NewsWidget],
     data () {
       return {
         layout: [
-          { x: 0, y: 0, w: 2, h: 2, i: 0, d:'v-date-picker' },
-          { x: 2, y: 0, w: 2, h: 4, i: 1 ,d:'MusicPlayer'},
-          { x: 4, y: 0, w: 2, h: 5, i: 2 },
-          { x: 6, y: 0, w: 2, h: 3, i: 3 },
-          { x: 8, y: 0, w: 2, h: 3, i: 4 },
-          { x: 8, y: 0, w: 2, h: 3, i: 5 },
-          { x: 0, y: 5, w: 2, h: 5, i: 6 },
-          { x: 2, y: 5, w: 2, h: 5, i: 7 },
-          { x: 4, y: 5, w: 2, h: 5, i: 8 },
-          { x: 6, y: 3, w: 2, h: 4, i: 9 }
-        ]
+          { x: 0, y: 0, w: 3, h: 4, i: 3 , d:'TimeWidget'},
+          { x: 0, y: 4, w: 2, h: 7, i: 0, d:'CalendarWidget' },
+          //{ x: 2, y: 2, w: 2, h: 4, i: 1 ,d:'MusicPlayer'},
+          { x: 6, y: 0, w: 5, h: 5, i: 2 , d:'WeatherWidget'},
+          //{ x: 10, y: 12, w: 10, h: 10, i: 4 , d:'NewsWidget'},
+          //{ x: 0, y: 10, w: 2, h: 3, i: 5 }
+        ],
+        draggable: true,
+        resizable: true,
+        time: 0
       }
     }
   }
@@ -75,7 +76,7 @@
     background: rgb(216, 6, 6);
 }
 .vue-grid-item:not(.vue-grid-placeholder) {
-    background: rgb(247, 247, 247);
+    background: rgb(247, 247, 247,0.1);
     border: 1px solid black;
 }
 .vue-grid-item .resizing {
