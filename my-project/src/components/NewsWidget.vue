@@ -1,10 +1,10 @@
 <template>
-    <div>
+
+    <div style="color: #fff">
         <div v-for="(noticia,index) in this.news" :key="index"> 
             <h3>{{noticia.title}}</h3>
         </div>
     </div>
-    <h1>{{this.news}}</h1>
 </template>
 
 <script>
@@ -14,7 +14,7 @@
         // Pass true to use DarkSky API, otherwise it will use OpenWeatherMap API
         apiKey: {
             type: String,
-            default: "5770ad4f261349b886ca4a187e593fb9",
+            default: "5770ad4f261349b886ca4a187e593fb9",//9
         },
         category: {
             type: String,
@@ -37,13 +37,15 @@
     import:[],
     data () {
       return {
-        news: "",
+        news: [],
+        bulkNews: [],
         url: "https://newsapi.org/v2/top-headlines?"
       }
     },
     created() {
         setInterval(this.getNews, 900000);
         setInterval(this.changeNews, 60000);
+        setInterval(this.swapNews, 300000);
         this.getNews()
     },
     methods: {
@@ -55,12 +57,18 @@
             `&pageSize=` + this.pageSize)
             .then((resp) => resp.json())
             .then((data) => {
-                this.news = data.articles;
+                this.bulkNews = data.articles;
+                const half = Math.ceil(this.bulkNews.length / 2);    
+
+                this.news = this.bulkNews.slice(0, half)
                 return data;
             });
             console.log(this.news)
         },
         changeNews: function() {
+            //funcao para ir bsucar as noticias
+        },
+        swapNews: function() {
             //funcao para ir bsucar as noticias
         }
     }

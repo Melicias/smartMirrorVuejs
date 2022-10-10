@@ -60,7 +60,7 @@
           { x: 0, y: 4, w: 2, h: 7, i: 0, d:'CalendarWidget' },
           //{ x: 2, y: 2, w: 2, h: 4, i: 1 ,d:'MusicPlayer'},
           { x: 6, y: 0, w: 5, h: 5, i: 2 , d:'WeatherWidget'},
-          //{ x: 10, y: 12, w: 10, h: 10, i: 4 , d:'NewsWidget'},
+          { x: 0, y: 16, w: 10, h: 6, i: 4 , d:'NewsWidget'},
           //{ x: 0, y: 10, w: 2, h: 3, i: 5 }
         ],
         draggable: true,
