@@ -1,15 +1,20 @@
 <template>
-
-    <div style="color: #fff">
-        <div v-for="(noticia,index) in this.news" :key="index"> 
-            <h3>{{noticia.title}}</h3>
-        </div>
-    </div>
+    <Splide class="splide" :options="{ rewind: true, arrows:false, autoplay: true}" aria-label="My Favorite Images" style="color: #fff">
+        <SplideSlide data-splide-interval="20000" v-for="(noticia,index) in this.news" :key="index">
+            <div style="color: #fff; text-align: center;">
+                <h3 style="margin:5px; padding:0;">{{noticia.title}}</h3>
+                <p style="margin-left:20px;margin-bottom:20px;" :id=index>&nbsp;&nbsp;{{noticia.description}}</p>
+            <br>
+            </div>
+        </SplideSlide>
+    </Splide>
 </template>
 
 <script>
+  import '@splidejs/vue-splide/css';
+  import { Splide, SplideSlide } from '@splidejs/vue-splide';
   export default {
-    components: {},
+    components: {Splide, SplideSlide},
     props: {
         // Pass true to use DarkSky API, otherwise it will use OpenWeatherMap API
         apiKey: {
@@ -30,7 +35,7 @@
         },
         pageSize: {
             type: Number,
-            default: 10,
+            default: 20,
         }
     },
     name: 'App',
@@ -38,14 +43,13 @@
     data () {
       return {
         news: [],
-        bulkNews: [],
-        url: "https://newsapi.org/v2/top-headlines?"
+        url: "https://newsapi.org/v2/top-headlines?",
       }
     },
     created() {
         setInterval(this.getNews, 900000);
-        setInterval(this.changeNews, 60000);
-        setInterval(this.swapNews, 300000);
+        //setInterval(this.changeNews, 60000);
+        //setInterval(this.swapNews, 300000);
         this.getNews()
     },
     methods: {
@@ -57,13 +61,11 @@
             `&pageSize=` + this.pageSize)
             .then((resp) => resp.json())
             .then((data) => {
-                this.bulkNews = data.articles;
-                const half = Math.ceil(this.bulkNews.length / 2);    
-
-                this.news = this.bulkNews.slice(0, half)
+                this.news = data.articles;
+                console.log(this.news)
                 return data;
             });
-            console.log(this.news)
+            
         },
         changeNews: function() {
             //funcao para ir bsucar as noticias

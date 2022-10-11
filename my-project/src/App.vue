@@ -60,7 +60,7 @@
           { x: 0, y: 4, w: 2, h: 7, i: 0, d:'CalendarWidget' },
           //{ x: 2, y: 2, w: 2, h: 4, i: 1 ,d:'MusicPlayer'},
           { x: 6, y: 0, w: 5, h: 5, i: 2 , d:'WeatherWidget'},
-          { x: 0, y: 16, w: 10, h: 6, i: 4 , d:'NewsWidget'},
+          { x: 0, y: 16, w: 10, h: 4, i: 4 , d:'NewsWidget'},
           //{ x: 0, y: 10, w: 2, h: 3, i: 5 }
         ],
         draggable: true,
@@ -76,7 +76,7 @@
     background: rgb(216, 6, 6);
 }
 .vue-grid-item:not(.vue-grid-placeholder) {
-    background: rgb(247, 247, 247,0.1);
+    background: transparent;
     border: 1px solid black;
 }
 .vue-grid-item .resizing {
