@@ -1,5 +1,5 @@
 <template>
-    <Splide class="splide" :options="{ rewind: true, arrows:false, autoplay: true}" aria-label="My Favorite Images" style="color: #fff">
+    <Splide ref="splide" :options="{ rewind: true, arrows:false, autoplay: true}" aria-label="My Favorite Images" style="color: #fff">
         <SplideSlide data-splide-interval="20000" v-for="(noticia,index) in this.news" :key="index">
             <div style="color: #fff; text-align: center;">
                 <h3 style="margin:5px; padding:0;">{{noticia.title}}</h3>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+  import { ref } from 'vue';
   import '@splidejs/vue-splide/css';
   import { Splide, SplideSlide } from '@splidejs/vue-splide';
   export default {
@@ -67,13 +68,23 @@
             });
             
         },
+        next: function(){
+            this.$refs.splide.go('>')
+        },
+        previous: function(){
+            this.$refs.splide.go('<')
+        },
         changeNews: function() {
             //funcao para ir bsucar as noticias
         },
         swapNews: function() {
             //funcao para ir bsucar as noticias
         }
-    }
+    },
+    setup() {
+        const splide = ref();
+        return {splide}
+    },
   }
 </script>
 
