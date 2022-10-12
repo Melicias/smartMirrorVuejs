@@ -49,6 +49,7 @@ import CalendarWidget from "./components/CalendarWidget.vue";
 import TimeWidget from "./components/TimeWidget.vue";
 import NewsWidget from "./components/NewsWidget.vue";
 import YoutubeWidget from "./components/YoutubeWidget.vue";
+import SpotifyPlayer from "./components/SpotifyPlayer.vue";
 export default {
   components: {
     MusicPlayer,
@@ -57,6 +58,7 @@ export default {
     TimeWidget,
     NewsWidget,
     YoutubeWidget,
+    SpotifyPlayer
   },
   name: "App",
   import: [
@@ -76,6 +78,7 @@ export default {
         { x: 7, y: 0, w: 5, h: 5, i: 2, d: "WeatherWidget" },
         { x: 1, y: 21, w: 10, h: 4, i: 4, d: "NewsWidget" },
         { x: 0, y: 10, w: 4, h: 8, i: 5, d: "YoutubeWidget" },
+        { x: 10, y: 10, w: 2, h: 4, i: 3, d: "SpotifyPlayer" },
       ],
       draggable: true,
       resizable: true,

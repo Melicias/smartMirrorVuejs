@@ -18,8 +18,8 @@ export default {
   name: 'YoutubeWidget',
   data() {
     return {
-      temp: { video_id: "", loop: 1 },
-      play : { video_id: "", loop: 1 },
+      temp: { video_id: "vFU92ho_Q4Y", loop: 1 },
+      play : { video_id: "vFU92ho_Q4Y", loop: 1 },
       visibilityHidden: "hidden"
     }
   },
