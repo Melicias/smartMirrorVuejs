@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <div>
-      video_id : <input type="text" v-model="temp.video_id" /><br />
-      loop : <input type="number"  v-model.number="temp.loop" /><br />
+  <div :style="{visibility: this.visibilityHidden,}">
+    <div style="text-align: center;">
       <button @click="applyConfig">Apply</button>
       <button @click="playCurrentVideo">Play</button>
       <button @click="stopCurrentVideo">Stop</button>
@@ -20,8 +18,9 @@ export default {
   name: 'YoutubeWidget',
   data() {
     return {
-      temp: { video_id: "3P1CnWI62Ik", loop: 1 },
-      play : { video_id: "3P1CnWI62Ik", loop: 1 },
+      temp: { video_id: "", loop: 1 },
+      play : { video_id: "", loop: 1 },
+      visibilityHidden: "hidden"
     }
   },
   components: {
@@ -49,6 +48,6 @@ export default {
     onPlayed() {
       console.log("## OnPlayed")
     },
-  },
+  }
 }
 </script>

@@ -70,12 +70,12 @@ export default {
   data() {
     return {
       layout: [
-        { x: 0, y: 0, w: 3, h: 4, i: 3, d: "TimeWidget" },
-        { x: 0, y: 4, w: 3, h: 7, i: 0, d: "CalendarWidget" },
+        //{ x: 0, y: 0, w: 3, h: 4, i: 3, d: "TimeWidget" },
+        { x: 0, y: 0, w: 3, h: 7, i: 0, d: "CalendarWidget" },
         //{ x: 2, y: 2, w: 2, h: 4, i: 1 ,d:'MusicPlayer'},
         { x: 7, y: 0, w: 5, h: 5, i: 2, d: "WeatherWidget" },
-        { x: 0, y: 18, w: 10, h: 4, i: 4, d: "NewsWidget" },
-        { x: 0, y: 10, w: 2, h: 3, i: 5, d: "YoutubeWidget" },
+        { x: 1, y: 21, w: 10, h: 4, i: 4, d: "NewsWidget" },
+        { x: 0, y: 10, w: 4, h: 8, i: 5, d: "YoutubeWidget" },
       ],
       draggable: true,
       resizable: true,
