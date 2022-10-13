@@ -2,7 +2,6 @@ export class APIService{
     url:string | undefined
     apiKey='23092e9c-4b9f-4956-95f5-02ce7eee30ec'
       getHolidaysAsync():Promise<any>{
-        console.log(process.env.GOOGLE_API_KEY)
         const BASE_CALENDAR_URL = "https://www.googleapis.com/calendar/v3/calendars";
         const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY = "holiday@group.v.calendar.google.com"; // Calendar Id. This is public but apparently not documented anywhere officialy.
         const API_KEY = process.env.VUE_APP_GOOGLE_API_KEY;
@@ -13,6 +12,5 @@ export class APIService{
             .then((data) => {
               return data;
             })         
-        
     }
 }

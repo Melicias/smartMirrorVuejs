@@ -1,5 +1,5 @@
 <template>
-  <div :style="{visibility: this.visibilityHidden,}">
+  <div :style="{visibility: this.visibilityHidden}">
     <div style="text-align: center;">
       <button @click="applyConfig">Apply</button>
       <button @click="playCurrentVideo">Play</button>
@@ -20,7 +20,7 @@ export default {
     return {
       temp: { video_id: "vFU92ho_Q4Y", loop: 1 },
       play : { video_id: "vFU92ho_Q4Y", loop: 1 },
-      visibilityHidden: "hidden"
+      visibilityHidden: ""
     }
   },
   components: {

@@ -5,7 +5,8 @@
         latitude="39.734097"
         longitude="-8.821209"
         text-color="#fff"
-        v-bind:hide-header="true"
+        positionstackApi="00d723792211b93a60ad2af7d349ce47"
+        v-bind:hide-header="false"
         language="en"
     />
 </template>

@@ -63,7 +63,6 @@
             .then((resp) => resp.json())
             .then((data) => {
                 this.news = data.articles;
-                console.log(this.news)
                 return data;
             });
             
