@@ -78,8 +78,8 @@ export default {
         "Friday",
         "Saturday",
       ],
+      calendarTitle: null,
       time: {
-        calendarTitle: null,
         date: {
           day: null,
           month: null,
@@ -97,6 +97,7 @@ export default {
     fetchHolidays: function () {
       var ToDate = new Date();
       this.apiService.getHolidaysAsync().then((data) => {
+        
         this.calendarTitle = data.summary;
         var temp = data.items
           .filter(
