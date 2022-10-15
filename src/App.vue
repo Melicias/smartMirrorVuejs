@@ -50,6 +50,8 @@ import TimeWidget from "./components/TimeWidget.vue";
 import NewsWidget from "./components/NewsWidget.vue";
 import YoutubeWidget from "./components/YoutubeWidget.vue";
 import SpotifyPlayer from "./components/SpotifyPlayer.vue";
+import WifiQRCode from "./components/WifiQRCodeWidget.vue";
+
 export default {
   components: {
     MusicPlayer,
@@ -58,7 +60,8 @@ export default {
     TimeWidget,
     NewsWidget,
     YoutubeWidget,
-    SpotifyPlayer
+    SpotifyPlayer,
+    WifiQRCode,
   },
   name: "App",
   import: [
@@ -79,6 +82,7 @@ export default {
         { x: 1, y: 21, w: 10, h: 4, i: 4, d: "NewsWidget" },
         //{ x: 0, y: 10, w: 4, h: 8, i: 5, d: "YoutubeWidget" },
         { x: 10, y: 10, w: 2, h: 4, i: 3, d: "SpotifyPlayer" },
+        { x: 4, y: 4, w: 3.5, h: 0, i: 8, d: "WifiQRCode" },
       ],
       draggable: true,
       resizable: true,
