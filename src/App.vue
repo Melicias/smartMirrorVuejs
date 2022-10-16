@@ -51,6 +51,7 @@ import NewsWidget from "./components/NewsWidget.vue";
 import YoutubeWidget from "./components/YoutubeWidget.vue";
 import SpotifyPlayer from "./components/SpotifyPlayer.vue";
 import StatsWidget from "./components/StatsWidget.vue";
+import WaterWidget from "./components/WaterWidget.vue";
 export default {
   components: {
     MusicPlayer,
@@ -60,7 +61,8 @@ export default {
     NewsWidget,
     YoutubeWidget,
     SpotifyPlayer,
-    StatsWidget
+    StatsWidget,
+    WaterWidget,
   },
   name: "App",
   import: [
@@ -71,6 +73,7 @@ export default {
     NewsWidget,
     YoutubeWidget,
     StatsWidget,
+    WaterWidget,
   ],
   data() {
     return {
@@ -81,10 +84,10 @@ export default {
         //{ x: 0, y: 10, w: 4, h: 8, i: 5, d: "YoutubeWidget" },
         //{ x: 4, y: 10, w: 2, h: 2, i: 5, d: "StatsWidget" },
         { x: 0, y: 0, w: 3, h: 7, i: 0, d: "CalendarWidget" },
-        { x: 7, y: 0, w: 5, h: 5, i: 2, d: "WeatherWidget" },
-        { x: 1, y: 21, w: 10, h: 4, i: 4, d: "NewsWidget" },
-        { x: 10, y: 10, w: 2, h: 4, i: 3, d: "SpotifyPlayer" },
-        
+        { x: 7, y: 0, w: 5, h: 5, i: 1, d: "WeatherWidget" },
+        { x: 1, y: 21, w: 10, h: 4, i: 2, d: "NewsWidget" },
+        { x: 1, y: 15, w: 7, h: 2, i: 3, d: "WaterWidget"},
+        { x: 10, y: 10, w: 2, h: 10, i: 4, d: "SpotifyPlayer"}
       ],
       draggable: true,
       resizable: true,
