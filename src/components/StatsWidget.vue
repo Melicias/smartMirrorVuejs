@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import Stats from 'stats.js'
   export default {
   components: {},
     name: 'App',
