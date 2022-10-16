@@ -1,4 +1,4 @@
-import { Season, Standing } from "../Models/SoccerModels";
+import { Season, Standing, Team } from "../Models/SoccerModels";
 export class APIService {
   url: string | undefined;
   getHolidaysAsync(): Promise<any> {
@@ -20,8 +20,8 @@ export class APIService {
     const BASE_URL = "https://app.sportdataapi.com/api/v1/soccer";
     const API_KEY = process.env.VUE_APP_SOCCER_API_KEY;
     const standings: Standing[] = [];
+    const teamsID:number[]=[];
     console.log(API_KEY);
-    league_id = 490;
     const URL_SEASON = `${BASE_URL}/seasons?apikey=${API_KEY}&league_id=${league_id}`;
     console.log(URL_SEASON);
     return new Promise((resolve, reject) => {
@@ -42,20 +42,33 @@ export class APIService {
         .then((resp) => resp.json())
         .then((data) => {
           let standing: Standing;
-          data.data.standings.slice(0, 1).map((x: Standing) => {
-            standing = x;
+          let arrayOfPromises;
+          const temp:Standing[]=data.data.standings.slice(0, 18);
+          return Promise.all(temp.map((x:Standing)=>{
+            standing=x;
             const URL_TEAM = `${BASE_URL}/teams/${x.team_id}?apikey=${API_KEY}`;
-            fetch(URL_TEAM)
-              .then((resp) => resp.json())
-              .then((data) => {
-                standing.team_name = data.data.name;
-                standing.team_logo = data.data.logo;
-              });
             standings.push(standing);
+            return fetch(URL_TEAM)
+          })).then((responses)=> Promise.all(responses.map(res=>res.text())) 
+          ).then(teams=>{
+            teams.map((x)=>{
+              const temp=JSON.parse(x);
+              console.log(temp.data)
+              const index=standings.findIndex(x=>x.team_id==temp.data.team_id);
+              standings[index].team_data=new Team();
+              standings[index].team_data!.name=temp.data.name?temp.data.name:"";
+              standings[index].team_data!.logo=temp.data.logo;
+              standings[index].team_data!.short_code=temp.data.short_code;
+            })
+            
+            return standings
+          })
+        
+          }).then((x) => {
+            resolve(x)
           });
-          return standings;
         })
-        .then((x) => resolve(x));
-    });
+        
+   
   }
 }

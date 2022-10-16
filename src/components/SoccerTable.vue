@@ -4,12 +4,14 @@
     class="module MMM-Formula1"
     style="transition: opacity 1.25s ease 0s; opacity: 1; position: static"
   >
-    <header class="module-header" style="display: block">F1 Standings</header>
+    <header class="module-header" style="display: block">
+      Premier League Portugal
+    </header>
     <div class="module-content">
       <div>
         <table class="small align-left">
           <thead>
-            <tr class="normal">
+            <tr class="normal dimmed">
               <td></td>
               <td>Position</td>
               <td class="light symbol stat">Team</td>
@@ -27,26 +29,31 @@
               style="opacity: 1"
               v-for="(standing, index) in standings"
               :key="index"
+              :class="{ evenRow: index % 2 == 0, oddRow: index % 2 != 0 }"
             >
-              <td class="symbol light">
-                <div class="flag flag-nl grayscale"></div>
+              <td class="symbol stat">
+                <div class="flag flag-nl grayscale">
+                  <img :src="standing.team_data.logo" alt="" />
+                </div>
               </td>
-              <td class="title bright stat">{{ standing.position }}</td>
-              <td class="title light stat">{{ standing.team_name }}</td>
-              <td class="bright align-right stat">
+              <td class="title stat">{{ standing.position }}</td>
+              <td class="title light stat">
+                {{ standing.team_data.short_code }}
+              </td>
+              <td class="align-right stat">
                 {{ standing.overall.games_played }}
               </td>
-              <td class="bright align-right stat">
+              <td class="align-right stat">
                 {{ standing.overall.won }}
               </td>
               <td class="title light stat">{{ standing.overall.draw }}</td>
-              <td class="bright align-right stat">
+              <td class="align-right stat">
                 {{ standing.overall.lost }}
               </td>
-              <td class="bright align-right stat">
+              <td class="align-right stat">
                 {{ standing.overall.goals_diff }}
               </td>
-              <td class="bright align-right stat">{{ standing.points }}</td>
+              <td class="align-right stat">{{ standing.points }}</td>
             </tr>
           </tbody>
           <tbody>
@@ -75,22 +82,30 @@ export default defineComponent({
     return {
       apiService: null,
       standings: [],
+      clearCache: false,
     };
   },
   methods: {
     fetchStandings: function () {
-      let apiService = new APIService();
-      return apiService.getSoccerData(123123);
-    },
-    getStandings: function () {
-      return { ...this.standings };
+      //estou a guardar na chace para nao usar os pedidos da api pq esta merda é chata que doi
+      var standingStore = localStorage["scoccerStandingsData"];
+      if (standingStore) {
+        this.standings = JSON.parse(standingStore);
+      } else {
+        let apiService = new APIService();
+        var league_id = 490; //1 liga de portugal hardcoded
+        apiService.getSoccerData(league_id).then((x) => {
+          this.standings.push(...x);
+          localStorage["scoccerStandingsData"] = JSON.stringify(this.standings);
+        });
+      }
     },
   },
   created() {
-    this.fetchStandings().then((x) => {
-      this.standings.push(...x);
-    });
-    console.log(this.standings);
+    this.fetchStandings();
+    setInterval(() => {
+      this.fetchStandings();
+    }, 86400000);
   },
 });
 </script>
@@ -98,6 +113,17 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import "../assets/variables.css";
+
+img {
+  /* IE6-9 */
+  /* filter: gray; */
+  /* Google Chrome, Safari 6+ & Opera 15+ */
+  /* -webkit-filter: grayscale(1);  */
+  /* Microsoft Edge and Firefox 35+ */
+  /* filter: grayscale(1);  */
+  width: 1.5rem;
+  height: 1.5rem;
+}
 
 header {
   text-transform: uppercase;
@@ -117,17 +143,18 @@ header {
 /**
    * Default styles.
    */
-
+.evenRow {
+  color: rgb(255, 255, 255);
+}
+.oddRow {
+  color: var(--color-text);
+}
 .align-right {
   text-align: right;
 }
 
 .dimmed {
   color: var(--color-text-dimmed);
-}
-
-.normal {
-  color: var(--color-text);
 }
 
 .bright {

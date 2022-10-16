@@ -22,8 +22,7 @@ export class Standing {
     goals_scored: number;
     goals_against: number;
   };
-  team_name?: string;
-  team_logo?: string;
+  team_data?: Team;
 }
 
 export class Team {
