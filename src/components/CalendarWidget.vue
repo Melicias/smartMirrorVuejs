@@ -62,7 +62,7 @@
 
 <script>
 import { APIService } from "../services/APIService";
-import { HolidayModel } from "../Models/holidayModel";
+//import { HolidayModel } from "../Models/holidayModel";
 export default {
   name: "CalendarWidget",
   data() {
