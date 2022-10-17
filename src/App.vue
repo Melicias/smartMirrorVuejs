@@ -2,8 +2,8 @@
   <body>
     <grid-layout
       v-model:layout="layout"
-      :col-num="12"
-      :row-height="30"
+      :col-num="this.col"
+      :row-height="this.row"
       :is-draggable="draggable"
       :is-resizable="resizable"
       :responsive="false"
@@ -83,19 +83,21 @@ export default {
   ],
   data() {
     return {
+      col: 30,
+      row: 60,
       layout: [
         //{ x: 0, y: 0, w: 3, h: 4, i: 3, d: "TimeWidget" },
         //{ x: 2, y: 2, w: 2, h: 4, i: 1 ,d:'MusicPlayer'},
 
         //{ x: 0, y: 10, w: 4, h: 8, i: 5, d: "YoutubeWidget" },
         //{ x: 4, y: 10, w: 2, h: 2, i: 5, d: "StatsWidget" },
-        { x: 0, y: 0, w: 3, h: 7, i: 0, d: "CalendarWidget" },
-        { x: 7, y: 0, w: 5, h: 5, i: 1, d: "WeatherWidget" },
-        { x: 1, y: 21, w: 10, h: 4, i: 2, d: "NewsWidget" },
-        { x: 1, y: 15, w: 7, h: 2, i: 3, d: "WaterWidget" },
-        { x: 10, y: 10, w: 2, h: 10, i: 4, d: "SpotifyPlayer" },
-        { x: 2, y: 1, w: 3.5, h: 0, i: 8, d: "WifiQRCode" },
-        { x: 4, y: 4, w: 3.5, h: 0, i: 9, d: "SoccerTable" },
+        { x: 0, y: 0, w: 6, h: 6, i: 0, d: "CalendarWidget" },
+        { x: 15, y: 0, w: 15, h: 3, i: 1, d: "WeatherWidget" },
+        { x: 4, y: 11, w: 22, h: 2, i: 2, d: "NewsWidget" },
+        { x: 6, y: 9, w: 18, h: 1, i: 3, d: "WaterWidget" },
+        { x: 25, y: 3, w: 5, h: 6, i: 4, d: "SpotifyPlayer" },
+        { x: 0, y: 6, w: 4, h: 3, i: 8, d: "WifiQRCode" },
+        //{ x: 4, y: 4, w: 3.5, h: 10, i: 9, d: "SoccerTable" },
       ],
       draggable: true,
       resizable: true,
