@@ -30,17 +30,15 @@ export default {
   },
   created() {
     this.data=generateWifiQRCode({
-        ssid: 'SEM_SINAL',
-        password: 'P@coc@2208',
-        encryption: 'WPA',
+        ssid: process.env.VUE_APP_SSID,
+        password: process.env.VUE_APP_SSID_PASSWORD,
+        encryption: process.env.VUE_APP_SSID_ENCRYPTION,
         hiddenSSID: false,
         outputFormat: { type: 'svg' }
     })
     this.data.then((data) =>{
-        console.log(data)
         this.data=data
-        }
-        )
+    })
   }
 };
 </script>

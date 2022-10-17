@@ -1,6 +1,6 @@
 <template>
   <div style="color:#fff;text-align: center;">
-    <span v-show="this.show" class="bright medium light center" style="font-size: 40px;">
+    <span v-show="this.show" class="bright medium light center" style="font-size: 30px;">
       {{this.foo}}
     </span>
   </div>
