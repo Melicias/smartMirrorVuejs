@@ -1,6 +1,7 @@
 <template>
   <body>
     <grid-layout
+      class="grid"
       v-model:layout="layout"
       :col-num="this.col"
       :row-height="this.row"
@@ -11,6 +12,8 @@
       :prevent-collision="true"
       :use-css-transforms="true"
       :autoSize="true"
+      :margin="margin"
+      :is-bounded="true"
     >
       <template #default="{ gridItemProps }">
         <!-- | gridItemProps props from GridLayout | -->
@@ -27,6 +30,7 @@
         <!--useCssTransforms: props.useCssTransforms-->
         <!--width: width.value-->
         <grid-item
+          class="vue-grid-item"
           v-for="item in layout"
           :key="item.i"
           v-bind="gridItemProps"
@@ -36,73 +40,49 @@
           :h="item.h"
           :i="item.i"
         >
-          <component :is="item.d"></component>
+          <component :is="item.d" :config="item.config"></component>
         </grid-item>
       </template>
     </grid-layout>
   </body>
 </template>
 <script>
-import MusicPlayer from "./components/MusicPlayer.vue";
-import WeatherWidget from "./components/WeatherWidget.vue";
-import CalendarWidget from "./components/CalendarWidget.vue";
-import TimeWidget from "./components/TimeWidget.vue";
-import NewsWidget from "./components/NewsWidget.vue";
-import YoutubeWidget from "./components/YoutubeWidget.vue";
-import SpotifyPlayer from "./components/SpotifyPlayer.vue";
-import StatsWidget from "./components/StatsWidget.vue";
-import WaterWidget from "./components/WaterWidget.vue";
-import SoccerTable from "./components/SoccerTable.vue";
-import WifiQRCode from "./components/WifiQRCodeWidget.vue";
+import * as widgets from "../js/widget_imports";
+
+import loader, { Loader } from "../js/loader";
 
 export default {
   components: {
-    MusicPlayer,
-    WeatherWidget,
-    CalendarWidget,
-    TimeWidget,
-    NewsWidget,
-    YoutubeWidget,
-    SpotifyPlayer,
-    StatsWidget,
-    WaterWidget,
-    WifiQRCode,
-    SoccerTable,
+    ...widgets,
   },
   name: "App",
-  import: [
-    MusicPlayer,
-    WeatherWidget,
-    CalendarWidget,
-    TimeWidget,
-    NewsWidget,
-    YoutubeWidget,
-    StatsWidget,
-    WaterWidget,
-    SoccerTable,
-  ],
+  import: [widgets],
   data() {
     return {
-      col: 30,
-      row: 60,
-      layout: [
-        //{ x: 0, y: 0, w: 3, h: 4, i: 3, d: "TimeWidget" },
-        //{ x: 2, y: 2, w: 2, h: 4, i: 1 ,d:'MusicPlayer'},
-
-        //{ x: 0, y: 10, w: 4, h: 8, i: 5, d: "YoutubeWidget" },
-        //{ x: 4, y: 10, w: 2, h: 2, i: 5, d: "StatsWidget" },
-        { x: 0, y: 0, w: 6, h: 6, i: 0, d: "CalendarWidget" },
-        { x: 15, y: 0, w: 15, h: 3, i: 1, d: "WeatherWidget" },
-        { x: 4, y: 11, w: 22, h: 2, i: 2, d: "NewsWidget" },
-        { x: 6, y: 9, w: 18, h: 1, i: 3, d: "WaterWidget" },
-        { x: 25, y: 3, w: 5, h: 6, i: 4, d: "SpotifyPlayer" },
-        { x: 0, y: 6, w: 4, h: 3, i: 8, d: "WifiQRCode" },
-        //{ x: 4, y: 4, w: 3.5, h: 10, i: 9, d: "SoccerTable" },
-      ],
+      col: 6,
+      row: 15,
+      layout: [],
       draggable: true,
       resizable: true,
       time: 0,
+      margin: [10, 10],
     };
+  },
+  created() {
+    var Modules = Loader()();
+    console.log(Modules);
+    Modules.forEach((x) => {
+      var module = {
+        x: x.position.x,
+        y: x.position.y,
+        w: x.size.width,
+        h: x.size.hight,
+        i: x.index,
+        d: x.name,
+        config: x.config,
+      };
+      this.layout.push(module);
+    });
   },
 };
 </script>
@@ -113,7 +93,6 @@ export default {
 }
 .vue-grid-item:not(.vue-grid-placeholder) {
   background: transparent;
-  border: 1px solid black;
 }
 .vue-grid-item .resizing {
   opacity: 0.9;
@@ -121,17 +100,8 @@ export default {
 .vue-grid-item .static {
   background: #cce;
 }
-.vue-grid-item .text {
-  font-size: 24px;
-  text-align: center;
+.vue-grid-item {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  height: 100%;
-  width: 100%;
 }
 .vue-grid-item .no-drag {
   height: 100%;

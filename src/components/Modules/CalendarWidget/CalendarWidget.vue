@@ -61,10 +61,13 @@
 </template>
 
 <script>
-import { APIService } from "../services/APIService";
+import { APIService } from "../../../services/APIService";
 //import { HolidayModel } from "../Models/holidayModel";
 export default {
   name: "CalendarWidget",
+  props: {
+    config: [],
+  },
   data() {
     return {
       apiService: null,
@@ -97,7 +100,6 @@ export default {
     fetchHolidays: function () {
       var ToDate = new Date();
       this.apiService.getHolidaysAsync().then((data) => {
-        
         this.calendarTitle = data.summary;
         var temp = data.items
           .filter(
@@ -138,6 +140,7 @@ export default {
     clearInterval(this.interval);
   },
   created() {
+    console.log(this.config);
     (this.apiService = new APIService()),
       // update the time every second
       (this.interval = setInterval(() => {
@@ -168,7 +171,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@import "../assets/variables.css";
+@import "../../../assets/variables.css";
 
 .clockGrid {
   display: inline-flex;
