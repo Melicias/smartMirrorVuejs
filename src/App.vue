@@ -49,7 +49,7 @@
 <script>
 import * as widgets from "../js/widget_imports";
 
-import loader, { Loader } from "../js/loader";
+import { Loader } from "../js/loader";
 
 export default {
   components: {

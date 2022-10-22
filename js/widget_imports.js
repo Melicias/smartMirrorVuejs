@@ -8,4 +8,15 @@ import StatsWidget from "../src/components/StatsWidget.vue";
 import WaterWidget from "../src/components/WaterWidget.vue";
 import SoccerTable from "../src/components/SoccerTable.vue";
 import TimeWidget from "../src/components/TimeWidget.vue";
-export { SpotifyPlayer, CalendarWidget };
+export {
+  TimeWidget,
+  SoccerTable,
+  SpotifyPlayer,
+  CalendarWidget,
+  MusicPlayer,
+  WeatherWidget,
+  NewsWidget,
+  YoutubeWidget,
+  StatsWidget,
+  WaterWidget,
+};
