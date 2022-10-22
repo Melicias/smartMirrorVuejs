@@ -158,4 +158,10 @@ export default {
   box-sizing: border-box;
   cursor: pointer;
 }
+.shrink{
+  -webkit-transform:scale(0.5);
+  -moz-transform:scale(0.5);
+  -ms-transform:scale(0.5);
+  transform:scale(0.5);
+}
 </style>
