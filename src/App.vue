@@ -50,7 +50,7 @@
 import * as widgets from "../js/widget_imports";
 
 import { Loader } from "../js/loader";
-
+import { io } from "socket.io-client";
 export default {
   components: {
     ...widgets,
@@ -59,6 +59,7 @@ export default {
   import: [widgets],
   data() {
     return {
+      socket: null,
       col: 6,
       row: 15,
       layout: [],
@@ -69,6 +70,12 @@ export default {
     };
   },
   created() {
+    this.socket = io("http://localhost:8081", {
+      transports: ["websocket"],
+    });
+    this.socket.on("newInscricao", (data) => {
+      console.log(data);
+    });
     var Modules = Loader()();
     console.log(Modules);
     Modules.forEach((x) => {
