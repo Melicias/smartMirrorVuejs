@@ -7,8 +7,8 @@ const io = require("socket.io")(httpServer, {
         credentials: true
     }
 })
-httpServer.listen(8080, function () {
-    console.log('listening on *:8080')
+httpServer.listen(8081, function () {
+    console.log('listening on *:8081')
 })
 io.on('connection', function (socket) {
     console.log(`client ${socket.id} has connected`)
