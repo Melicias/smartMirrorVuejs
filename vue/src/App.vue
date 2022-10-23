@@ -1,7 +1,7 @@
 <template>
   <body>
     <grid-layout
-      class="grid"
+      class=""
       v-model:layout="layout"
       :col-num="this.col"
       :row-height="this.row"
@@ -60,11 +60,11 @@ export default {
   data() {
     return {
       socket: null,
-      col: 6,
-      row: 15,
+      col: 20,
+      row: 30,
       layout: [],
       draggable: true,
-      resizable: true,
+      resizable: false,
       time: 0,
       margin: [10, 10],
     };
@@ -77,7 +77,6 @@ export default {
       console.log(data);
     });
     var Modules = Loader()();
-    console.log(Modules);
     Modules.forEach((x) => {
       var module = {
         x: x.position.x,

@@ -70,12 +70,15 @@
 </template>
 
 <script>
-import { APIService } from "../services/APIService";
-import { Season, Standing } from "../Models/SoccerModels";
+import { APIService } from "../../../services/APIService";
+import { Season, Standing } from "../../../Models/SoccerModels";
 import { defineComponent, toRaw } from "vue";
 export default defineComponent({
   components: {},
   name: "App",
+  props: {
+    config: {},
+  },
   import: [],
 
   data() {
@@ -112,7 +115,7 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@import "../assets/variables.css";
+@import "../../../assets/variables.css";
 
 img {
   /* IE6-9 */

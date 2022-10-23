@@ -16,6 +16,9 @@
   export default {
   components: {VueWeather},
     name: 'App',
+    props: {
+      config: {},
+    },
     import:[VueWeather],
     data () {
       return {}

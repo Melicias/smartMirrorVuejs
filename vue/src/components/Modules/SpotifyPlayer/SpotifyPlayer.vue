@@ -171,6 +171,9 @@
 export default {
   components: {},
   name: "SpotifyPlayer",
+  props: {
+    config: {},
+  },
   import: [],
   data() {
     return {

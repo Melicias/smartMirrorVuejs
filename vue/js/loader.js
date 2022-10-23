@@ -14,9 +14,7 @@ export const Loader = function () {
       const module = moduleData.module;
 
       const elements = module.split("/");
-      console.log(config);
       const moduleName = elements[elements.length - 1];
-      console.log(moduleName);
 
       let moduleFolder = config.paths + "/" + module;
 

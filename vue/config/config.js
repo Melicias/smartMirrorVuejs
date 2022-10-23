@@ -8,37 +8,79 @@ let config = {
         y: 0,
       },
       size: {
-        width: 2,
-        hight: 6,
+        width: 4,
+        hight: 7,
       },
       config: {},
     },
     {
-      module: "CalendarWidget",
+      module: "SpotifyPlayer",
       position: {
-        x: 1,
+        x: 17,
         y: 6,
       },
       size: {
-        width: 2,
-        hight: 2,
+        width: 3,
+        hight: 11,
       },
       config: {
-        mamae: "sabado",
+        
       },
     },
     {
-      module: "SpotifyPlayer",
+      module: "NewsWidget",
       position: {
-        x: 1,
-        y: 6,
+        x: 3,
+        y: 21,
       },
       size: {
-        width: 1,
-        hight: 18,
+        width: 14,
+        hight: 4,
       },
       config: {
-        mamae: "sabado",
+        
+      },
+    },
+    {
+      module: "WeatherWidget",
+      position: {
+        x: 11,
+        y: 0,
+      },
+      size: {
+        width: 9,
+        hight: 6,
+      },
+      config: {
+        
+      },
+    },
+    {
+      module: "generateWifiQRCode",
+      position: {
+        x: 0,
+        y: 7,
+      },
+      size: {
+        width: 2,
+        hight: 5,
+      },
+      config: {
+        
+      },
+    },
+    {
+      module: "WaterWidget",
+      position: {
+        x: 4,
+        y: 20,
+      },
+      size: {
+        width: 12,
+        hight: 1,
+      },
+      config: {
+        
       },
     },
   ],

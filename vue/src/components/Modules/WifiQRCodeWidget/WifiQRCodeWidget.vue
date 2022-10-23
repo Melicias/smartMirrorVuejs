@@ -17,11 +17,14 @@
 </template>
 
 <script>
-import {generateWifiQRCode}  from '../../node_modules/wifi-qr-code-generator';
+import {generateWifiQRCode}  from '../../../../node_modules/wifi-qr-code-generator';
 
 export default {
   components: {},
   name: "WifiCode",
+  props: {
+    config: {},
+  },
   import: [generateWifiQRCode],
   data() {
     return {

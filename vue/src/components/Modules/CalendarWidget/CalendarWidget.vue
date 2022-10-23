@@ -66,7 +66,7 @@ import { APIService } from "../../../services/APIService";
 export default {
   name: "CalendarWidget",
   props: {
-    config: [],
+    config: {},
   },
   data() {
     return {
@@ -140,7 +140,6 @@ export default {
     clearInterval(this.interval);
   },
   created() {
-    console.log(this.config);
     (this.apiService = new APIService()),
       // update the time every second
       (this.interval = setInterval(() => {

@@ -16,6 +16,9 @@ import { YoutubeVue3 } from 'youtube-vue3'
 
 export default {
   name: 'YoutubeWidget',
+  props: {
+    config: {},
+  },
   data() {
     return {
       temp: { video_id: "vFU92ho_Q4Y", loop: 1 },

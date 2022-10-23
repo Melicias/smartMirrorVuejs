@@ -18,6 +18,7 @@
     components: {Splide, SplideSlide},
     props: {
         // Pass true to use DarkSky API, otherwise it will use OpenWeatherMap API
+        config: {},
         apiKey: {
             type: String,
             default: "5770ad4f261349b886ca4a187e593fb9",//9

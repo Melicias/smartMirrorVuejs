@@ -11,6 +11,9 @@
   export default {
   components: {},
     name: 'WaterWidget',
+    props: {
+      config: {},
+    },
     import:[],
     data () {
       return {
@@ -21,8 +24,8 @@
         additionalPhrases: [],
         startTime: "00:00",
         endTime: "23:59",
-        messageDuration: 3000,//1 * 60 * 1000, // 1 min showing on the screen
-        reminderFrequency: 6000,//60 * 60 * 1000, // hourly reminder
+        messageDuration: 2 * 60 * 1000, // 2 min showing on the screen
+        reminderFrequency: 60 * 60 * 1000, // hourly reminder
         days: [0,1,2,3,4,5,6],
         alarm: {
           status: false, 
