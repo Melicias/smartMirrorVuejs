@@ -6,6 +6,7 @@ Necessario:
 	pip install face-recognition
 	pip install numpy
 	pip install -U scikit-learn
+	pip install "python-socketio[client]"
 
 
 
