@@ -5,6 +5,12 @@ from sklearn import svm
 import pickle
 import socketio
 
+class Name:
+    name = ''
+    time = 0           
+    def __init__(self, name):  
+        self.name = name
+
 sio = socketio.Client()
 sio.connect('http://localhost:8081')
 
@@ -15,12 +21,16 @@ video_capture = cv2.VideoCapture(0)
 # Create arrays of known face encodings and their names
 picleDir = 'pickleData/'
 encodings = []
-names = []
+names_raw = []
 f = open("pickleData/data", "rb").read()
 pickleFile = pickle.loads(f)
 encodings = (pickleFile['encodings'])
-names = (pickleFile['names'])
+names_raw = (pickleFile['names'])
 
+#add time until ask for next request
+names = []
+for n in names_raw:
+    names.append(Name(n))
 
 # Initialize some variables
 face_locations = []
@@ -52,9 +62,13 @@ while True:
                 encodings, face_encoding)
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
-                name = names[best_match_index]
-                sio.emit('newInscricao', name)
-
+                name = names[best_match_index].name
+                if names[best_match_index].time == 0 :
+                    sio.emit('newInscricao', name)
+                    names[best_match_index].time = 10 
+                else:
+                    names[best_match_index].time -= 1 
+                
             face_names.append(name)
 
     process_this_frame = not process_this_frame
