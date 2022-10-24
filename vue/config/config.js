@@ -9,7 +9,7 @@ let config = {
       },
       size: {
         width: 4,
-        hight: 7,
+        height: 7,
       },
       config: {},
     },
@@ -21,7 +21,7 @@ let config = {
       },
       size: {
         width: 3,
-        hight: 11,
+        height: 11,
       },
       config: {
         
@@ -35,7 +35,7 @@ let config = {
       },
       size: {
         width: 14,
-        hight: 4,
+        height: 4,
       },
       config: {
         
@@ -49,7 +49,7 @@ let config = {
       },
       size: {
         width: 9,
-        hight: 6,
+        height: 6,
       },
       config: {
         
@@ -63,7 +63,7 @@ let config = {
       },
       size: {
         width: 2,
-        hight: 5,
+        height: 5,
       },
       config: {
         
@@ -77,7 +77,7 @@ let config = {
       },
       size: {
         width: 12,
-        hight: 1,
+        height: 1,
       },
       config: {
         

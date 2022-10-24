@@ -8,7 +8,6 @@ import VueSplide from "@splidejs/vue-splide";
 import "v-calendar/dist/style.css";
 import "@fontsource/roboto";
 import socketio from "socket.io-client";
-import VueSocketIO from "vue-3-socket.io";
 
 export const useSocketIO = () => {
   const socket = socketio("http://localhost:8081");
@@ -16,6 +15,7 @@ export const useSocketIO = () => {
     socket,
   };
 };
+
 import { library, dom } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 

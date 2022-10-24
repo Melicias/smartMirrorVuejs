@@ -4,15 +4,29 @@ import numpy as np
 from sklearn import svm
 import pickle
 import socketio
+from datetime import datetime
+import firebase_admin
+from firebase_admin import db
+from firebase_admin import firestore 
 
 class Name:
     name = ''
-    time = 0           
+    time = ''
     def __init__(self, name):  
         self.name = name
+        self.time = datetime.now()
 
 sio = socketio.Client()
 sio.connect('http://localhost:8081')
+
+#connect to database firebase
+cred_obj = firebase_admin.credentials.Certificate('privateKeyFirebase.json')
+default_app = firebase_admin.initialize_app(cred_obj, {
+	'databaseURL':'https://rasp-mestrado.firebaseio.com/' })
+db = firestore.client() 
+collection = db.collection('user') 
+doc = collection.document('fy8FJ5bSxSAOH5FIWT7b') #get by the user id
+res = doc.get().to_dict()
 
 
 # Get a reference to webcam #0 (the default one)
@@ -63,11 +77,9 @@ while True:
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
                 name = names[best_match_index].name
-                if names[best_match_index].time == 0 :
+                if (datetime.now() - names[best_match_index].time).seconds > 10:
                     sio.emit('newInscricao', name)
-                    names[best_match_index].time = 10 
-                else:
-                    names[best_match_index].time -= 1 
+                    names[best_match_index].time = datetime.now()
                 
             face_names.append(name)
 

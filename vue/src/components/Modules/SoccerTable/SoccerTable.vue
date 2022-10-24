@@ -71,8 +71,8 @@
 
 <script>
 import { APIService } from "../../../services/APIService";
-import { Season, Standing } from "../../../Models/SoccerModels";
-import { defineComponent, toRaw } from "vue";
+//import { Season, Standing } from "../../../Models/SoccerModels";
+import { defineComponent } from "vue"; // , toRaw
 export default defineComponent({
   components: {},
   name: "App",

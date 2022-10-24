@@ -11,7 +11,7 @@ httpServer.listen(8081, function () {
   console.log("listening on *:8081");
 });
 io.on("connection", function (socket) {
-  console.log(`client ${socket.id} has connected`);
+  console.log(`client ${socket.id},${socket.localAddress}, ${socket.localPort} has connected`);
 });
 
 io.on("connection", function (socket) {

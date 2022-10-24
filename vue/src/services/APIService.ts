@@ -1,7 +1,7 @@
 import { Season, Standing, Team } from "../Models/SoccerModels";
 export class APIService {
   url: string | undefined;
-  getHolidaysAsync(): Promise<any> {
+  getHolidaysAsync(): Promise<unknown> { //trocado de any para unknown
     const BASE_CALENDAR_URL =
       "https://www.googleapis.com/calendar/v3/calendars";
     const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY =
@@ -20,7 +20,7 @@ export class APIService {
     const BASE_URL = "https://app.sportdataapi.com/api/v1/soccer";
     const API_KEY = process.env.VUE_APP_SOCCER_API_KEY;
     const standings: Standing[] = [];
-    const teamsID:number[]=[];
+    //const teamsID:number[]=[];
     console.log(API_KEY);
     const URL_SEASON = `${BASE_URL}/seasons?apikey=${API_KEY}&league_id=${league_id}`;
     console.log(URL_SEASON);
@@ -42,7 +42,7 @@ export class APIService {
         .then((resp) => resp.json())
         .then((data) => {
           let standing: Standing;
-          let arrayOfPromises;
+          //let arrayOfPromises;
           const temp:Standing[]=data.data.standings.slice(0, 18);
           return Promise.all(temp.map((x:Standing)=>{
             standing=x;

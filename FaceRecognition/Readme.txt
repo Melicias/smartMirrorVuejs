@@ -7,6 +7,7 @@ Necessario:
 	pip install numpy
 	pip install -U scikit-learn
 	pip install "python-socketio[client]"
+	pip install firebase_admin
 
 
 

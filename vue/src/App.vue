@@ -82,7 +82,7 @@ export default {
         x: x.position.x,
         y: x.position.y,
         w: x.size.width,
-        h: x.size.hight,
+        h: x.size.height,
         i: x.index,
         d: x.name,
         config: x.config,

@@ -1,0 +1,26 @@
+[
+    {
+      "module": "CalendarWidget",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "width": 4,
+        "height": 7
+      },
+      "config": {}
+    },
+    {
+      "module": "SpotifyPlayer",
+      "position": {
+        "x": 17,
+        "y": 6
+      },
+      "size": {
+        "width": 3,
+        "height": 11
+      },
+      "config": {}
+    }
+  ]

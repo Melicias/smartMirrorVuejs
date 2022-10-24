@@ -4,6 +4,8 @@
 
 /Websocket/node_modules
 
+/FaceRecognition/privateKeyFirebase.json
+
 
 # local env files
 /vue/.env
