@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "vue":"vue-cli-service serve --host localhost --port 8080 --open",
+    "vue": "vue-cli-service serve --host localhost --port 8080 --open",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -27,6 +27,7 @@
     "vue-socket.io": "^3.0.10",
     "vue-weather-widget": "github:Melicias/vue-weather-widget",
     "vue3-drr-grid-layout": "^1.9.1",
+    "vuex": "^4.1.0",
     "wifi-qr-code-generator": "^1.1.1",
     "youtube-vue3": "^0.1.15"
   },

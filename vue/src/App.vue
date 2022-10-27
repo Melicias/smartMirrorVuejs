@@ -48,9 +48,8 @@
 </template>
 <script>
 import * as widgets from "../js/widget_imports";
-
+import { store } from "./store/index";
 import { Loader } from "../js/loader";
-import { io } from "socket.io-client";
 export default {
   components: {
     ...widgets,
@@ -70,12 +69,6 @@ export default {
     };
   },
   created() {
-    this.socket = io("http://localhost:8081", {
-      transports: ["websocket"],
-    });
-    this.socket.on("newInscricao", (data) => {
-      console.log(data);
-    });
     var Modules = Loader()();
     Modules.forEach((x) => {
       var module = {
@@ -89,6 +82,9 @@ export default {
       };
       this.layout.push(module);
     });
+  },
+  mounted() {
+    store.dispatch("CONNECT");
   },
 };
 </script>

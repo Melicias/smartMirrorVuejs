@@ -7,23 +7,13 @@ import VCalendar from "v-calendar";
 import VueSplide from "@splidejs/vue-splide";
 import "v-calendar/dist/style.css";
 import "@fontsource/roboto";
-import socketio from "socket.io-client";
-
-export const useSocketIO = () => {
-  const socket = socketio("http://localhost:8081");
-  return {
-    socket,
-  };
-};
+import socket from "./services/socket";
 
 import { library, dom } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+//import { Vue } from "vue-class-component";
 
 library.add(fas);
 dom.watch();
-createApp(App)
-  .use(GridLayout)
-  .use(VCalendar, {})
-  .use(VueSplide)
-  .use(useSocketIO)
-  .mount("#app");
+
+createApp(App).use(GridLayout).use(VCalendar, {}).use(VueSplide).mount("#app");
