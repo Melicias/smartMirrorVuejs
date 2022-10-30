@@ -78,7 +78,7 @@ while True:
             if matches[best_match_index]:
                 name = names[best_match_index].name
                 if (datetime.now() - names[best_match_index].time).seconds > 10:
-                    sio.emit('newInscricao', name)
+                    sio.emit('NEW_RECOGNIZED_USER', name)
                     names[best_match_index].time = datetime.now()
                 
             face_names.append(name)

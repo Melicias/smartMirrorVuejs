@@ -1,9 +1,13 @@
-const { promises } = require("fs");
+const { promises,unlinkSync } = require("fs");
 const { join } = require("path");
+
+const path = "../vue/config";
+var timeOut;
 
 const generateJsFile = async (user_id) => {
   var modules = get_modules();
   await asyncWriteFile(user_id + ".js", modules);
+  userTimeOut(user_id)
 };
 
 const asyncWriteFile = async (filename, data) => {
@@ -13,7 +17,7 @@ const asyncWriteFile = async (filename, data) => {
    *  - a+ = Open file for reading and appending. The file is created if not exists
    */
   //__dirname
-  let path = "../vue/config";
+ 
   try {
     await promises.writeFile(join(path, filename), create_file(data), {
       flag: "w",
@@ -60,5 +64,14 @@ const get_modules = (user_id) => {
     ]`;
   return data;
 };
+
+const userTimeOut=(user_id)=>{
+  clearTimeout(timeOut);
+  var filename=user_id+".js";
+  timeOut = setTimeout(function() {
+    unlinkSync(join(path, filename))
+}, 60 * 1000); 
+}
+
 
 module.exports = { generateJsFile };

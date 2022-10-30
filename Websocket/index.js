@@ -13,15 +13,19 @@ httpServer.listen(8081, function () {
   console.log("listening on *:8081");
 });
 io.on("connection", function (socket) {
+  //check socket connection
   console.log(
     `client ${socket.id},${socket.localAddress}, ${socket.localPort} has connected`
   );
-});
-
-io.on("connection", function (socket) {
-  socket.on("newInscricao", function (response) {
+  socket.on("NEW_RECOGNIZED_USER", function (response) {
     generateJsFile("config");
     console.log(response);
-    socket.broadcast.emit("newInscricao", response);
+    socket.broadcast.emit("NEW_RECOGNIZED_USER", response);
   });
+
+  socket.on("NEW_USE_UPDATE",(response)=>{
+    socket.broadcast.emit("updateUser", response);
+  })
 });
+
+

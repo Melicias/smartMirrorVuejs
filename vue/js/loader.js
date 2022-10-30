@@ -1,9 +1,15 @@
-import config from "../config/config";
+import config from "../config/default";
+import Things  from '../config/*';
+
+
 
 export const Loader = function () {
   var moduleFiles = [];
 
   const getAllModules = function () {
+    console.log(Things.default)
+
+    
     return config.modules;
   };
 
