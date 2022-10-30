@@ -1,3 +1,5 @@
+const { generateJsFile } = require("./generate_file");
+
 const httpServer = require("http").createServer();
 const io = require("socket.io")(httpServer, {
   allowEIO3: true,
@@ -11,11 +13,14 @@ httpServer.listen(8081, function () {
   console.log("listening on *:8081");
 });
 io.on("connection", function (socket) {
-  console.log(`client ${socket.id},${socket.localAddress}, ${socket.localPort} has connected`);
+  console.log(
+    `client ${socket.id},${socket.localAddress}, ${socket.localPort} has connected`
+  );
 });
 
 io.on("connection", function (socket) {
   socket.on("newInscricao", function (response) {
+    generateJsFile("config");
     console.log(response);
     socket.broadcast.emit("newInscricao", response);
   });

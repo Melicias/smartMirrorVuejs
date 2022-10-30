@@ -50,6 +50,7 @@
 import * as widgets from "../js/widget_imports";
 import { store } from "./store/index";
 import { Loader } from "../js/loader";
+import { APIService } from "../src/services/APIService";
 export default {
   components: {
     ...widgets,
@@ -69,6 +70,8 @@ export default {
     };
   },
   created() {
+    var teste = new APIService();
+    teste.getUserConfig();
     var Modules = Loader()();
     Modules.forEach((x) => {
       var module = {

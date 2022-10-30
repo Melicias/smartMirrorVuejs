@@ -1,7 +1,11 @@
 import { Season, Standing, Team } from "../Models/SoccerModels";
+
+import { saveAs } from "file-saver";
+import { Observable } from "rxjs";
 export class APIService {
   url: string | undefined;
-  getHolidaysAsync(): Promise<unknown> { //trocado de any para unknown
+  getHolidaysAsync(): Promise<unknown> {
+    //trocado de any para unknown
     const BASE_CALENDAR_URL =
       "https://www.googleapis.com/calendar/v3/calendars";
     const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY =
@@ -43,32 +47,43 @@ export class APIService {
         .then((data) => {
           let standing: Standing;
           //let arrayOfPromises;
-          const temp:Standing[]=data.data.standings.slice(0, 18);
-          return Promise.all(temp.map((x:Standing)=>{
-            standing=x;
-            const URL_TEAM = `${BASE_URL}/teams/${x.team_id}?apikey=${API_KEY}`;
-            standings.push(standing);
-            return fetch(URL_TEAM)
-          })).then((responses)=> Promise.all(responses.map(res=>res.text())) 
-          ).then(teams=>{
-            teams.map((x)=>{
-              const temp=JSON.parse(x);
-              console.log(temp.data)
-              const index=standings.findIndex(x=>x.team_id==temp.data.team_id);
-              standings[index].team_data=new Team();
-              standings[index].team_data!.name=temp.data.name?temp.data.name:"";
-              standings[index].team_data!.logo=temp.data.logo;
-              standings[index].team_data!.short_code=temp.data.short_code;
+          const temp: Standing[] = data.data.standings.slice(0, 18);
+          return Promise.all(
+            temp.map((x: Standing) => {
+              standing = x;
+              const URL_TEAM = `${BASE_URL}/teams/${x.team_id}?apikey=${API_KEY}`;
+              standings.push(standing);
+              return fetch(URL_TEAM);
             })
-            
-            return standings
-          })
-        
-          }).then((x) => {
-            resolve(x)
-          });
+          )
+            .then((responses) =>
+              Promise.all(responses.map((res) => res.text()))
+            )
+            .then((teams) => {
+              teams.map((x) => {
+                const temp = JSON.parse(x);
+                console.log(temp.data);
+                const index = standings.findIndex(
+                  (x) => x.team_id == temp.data.team_id
+                );
+                standings[index].team_data = new Team();
+                standings[index].team_data!.name = temp.data.name
+                  ? temp.data.name
+                  : "";
+                standings[index].team_data!.logo = temp.data.logo;
+                standings[index].team_data!.short_code = temp.data.short_code;
+              });
+
+              return standings;
+            });
         })
-        
-   
+        .then((x) => {
+          resolve(x);
+        });
+    });
+  }
+
+  getUserConfig(): any {
+    console.log("");
   }
 }
