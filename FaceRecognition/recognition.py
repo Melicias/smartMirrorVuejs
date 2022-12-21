@@ -8,6 +8,8 @@ from datetime import datetime
 import firebase_admin
 from firebase_admin import db
 from firebase_admin import firestore 
+import threading
+import json
 
 class Name:
     name = ''
@@ -24,9 +26,38 @@ cred_obj = firebase_admin.credentials.Certificate('privateKeyFirebase.json')
 default_app = firebase_admin.initialize_app(cred_obj, {
 	'databaseURL':'https://rasp-mestrado.firebaseio.com/' })
 db = firestore.client() 
-collection = db.collection('user') 
-doc = collection.document('fy8FJ5bSxSAOH5FIWT7b') #get by the user id
-res = doc.get().to_dict()
+#collection = db.collection('user') 
+#doc = collection.document('fy8FJ5bSxSAOH5FIWT7b') #get by the user id
+#res = doc.get().to_dict()
+
+# Create an Event for notifying main thread.
+delete_done = threading.Event()
+
+# Create a callback on_snapshot function to capture changes
+def on_snapshot(col_snapshot, changes, read_time):
+    for change in changes:
+        if change.type.name == 'ADDED':
+            print(f'New user: {change.document.id}')
+            sio.emit('newInscricao', "teste1 - " + change.document.id)
+        elif change.type.name == 'MODIFIED':
+            print(f'Modified user: {change.document.id}')
+            doc_dict = change.document.to_dict()
+            json_object = json.dumps(doc_dict, indent = 4)
+            #with open("sample.json", "w") as outfile:
+            #    json.dump(json_object, outfile)
+            sio.emit('newInscricao', "teste2 - " + doc_dict["imageFRurl"])
+
+            #fazer download da imagem, talvez chamar uma funcao para tratar disso
+            #doc_dict["imageFRurl"]
+        elif change.type.name == 'REMOVED':
+            print(f'Removed user: {change.document.id}')
+            sio.emit('newInscricao', "teste3 - " + change.document.id)
+            delete_done.set()
+
+col_query = db.collection(u'user')
+
+# Watch the collection query
+query_watch = col_query.on_snapshot(on_snapshot)
 
 
 # Get a reference to webcam #0 (the default one)
