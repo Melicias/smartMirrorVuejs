@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "all": "concurrently  --kill-others \"npm run socket\" \"npm run pyWin\" \"npm run vue\"",
+    "all": "concurrently  --kill-others \"npm run socket\" \"npm run pyMac\" \"npm run vue\"",
     "socket": "cd ./Websocket && node index",
     "vue": "cd ./vue && npm run vue",
     "pyMac": "cd ./FaceRecognition && python3 recognition.py",

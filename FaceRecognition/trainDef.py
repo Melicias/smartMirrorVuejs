@@ -4,14 +4,13 @@ import os
 import numpy as np
 import pickle
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-image_dir = os.path.join(BASE_DIR, "images_input")
-picleDir = 'pickleData/'
-encodings = []
-names = []
-
-
+#To train the algorithm
 def train(fullTrain):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    image_dir = os.path.join(BASE_DIR, "images_input")
+    picleDir = 'pickleData/'
+    encodings = []
+    names = []
     for root, dirs, files in os.walk(image_dir):
         for file in files:
             if file.endswith("png") or file.endswith("jpg"):
@@ -31,9 +30,7 @@ def train(fullTrain):
                 else:
                     os.remove(path)
                     print("File was skipped and deleted. (can't be used for training)")
-
-
-def storeData(fullTrain):
+    #stora data
     data = {"encodings": encodings, "names": names}
     if(fullTrain):
         f = open("pickleData/SVM_data", "wb")
@@ -42,20 +39,7 @@ def storeData(fullTrain):
     f.write(pickle.dumps(data))
 
 
-def main():
-    while True:
-        fullTrain = input(
-            "Full train (svm) or small train (normal)? (0 - small | 1 - Full) ")
-        fullTrain = int(fullTrain)
-        if(fullTrain == 0 or fullTrain == 1):
-            fullTrain = bool(fullTrain)
-            break
-        else:
-            print("Input should be 0 or 1")
-            continue
-    train(fullTrain)
-    storeData(fullTrain)
 
 
-# comentar isto para nao necessitar no recognition
-main()
+
+
