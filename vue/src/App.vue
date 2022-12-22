@@ -73,17 +73,21 @@ export default {
     var teste = new APIService();
     teste.getUserConfig();
     var Modules = Loader()();
-    Modules.forEach((x) => {
-      var module = {
-        x: x.position.x,
-        y: x.position.y,
-        w: x.size.width,
-        h: x.size.height,
-        i: x.index,
-        d: x.name,
-        config: x.config,
-      };
-      this.layout.push(module);
+    Modules.forEach((module) => {
+      for (let key in module) {
+        module[key].forEach((x) => {
+          const newModule = {
+            x: x.position.x,
+            y: x.position.y,
+            w: x.size.width,
+            h: x.size.height,
+            i: x.index,
+            d: x.name,
+            config: x.config,
+          };
+          this.layout.push(newModule);
+        });
+      }
     });
   },
   mounted() {

@@ -17,15 +17,15 @@ io.on("connection", function (socket) {
   console.log(
     `client ${socket.id},${socket.localAddress}, ${socket.localPort} has connected`
   );
-  socket.on("NEW_RECOGNIZED_USER", function (response) {
-    generateJsFile("config");
-    console.log(response);
+  socket.on("NEW_RECOGNIZED_USER", (response) => {
+    userData = JSON.parse(response);
+    generateJsFile(userData);
     socket.broadcast.emit("NEW_RECOGNIZED_USER", response);
   });
 
-  socket.on("NEW_USE_UPDATE",(response)=>{
+  socket.on("NEW_USE_UPDATE", (response) => {
+    userData = JSON.parse(response);
+    generateJsFile(userData);
     socket.broadcast.emit("updateUser", response);
-  })
+  });
 });
-
-

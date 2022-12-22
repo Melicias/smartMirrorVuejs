@@ -1,63 +1,97 @@
 import face_recognition
 import cv2
 import numpy as np
+import os
 from sklearn import svm
 import pickle
 import socketio
 from datetime import datetime
 import firebase_admin
 from firebase_admin import db
-from firebase_admin import firestore 
+from firebase_admin import firestore
+from firebase_admin import storage
 import threading
 import json
+from train import train
+
 
 class Name:
     name = ''
     time = ''
-    def __init__(self, name):  
+
+    def __init__(self, name):
         self.name = name
         self.time = datetime.now()
+
 
 sio = socketio.Client()
 sio.connect('http://localhost:8081')
 
-#connect to database firebase
+# connect to database firebase
 cred_obj = firebase_admin.credentials.Certificate('privateKeyFirebase.json')
 default_app = firebase_admin.initialize_app(cred_obj, {
-	'databaseURL':'https://rasp-mestrado.firebaseio.com/' })
-db = firestore.client() 
-#collection = db.collection('user') 
-#doc = collection.document('fy8FJ5bSxSAOH5FIWT7b') #get by the user id
-#res = doc.get().to_dict()
+    'databaseURL': 'https://rasp-mestrado.firebaseio.com/',
+    'storageBucket': 'rasp-mestrado.appspot.com'
+})
+db = firestore.client()
+# collection = db.collection('user')
+# doc = collection.document('fy8FJ5bSxSAOH5FIWT7b') #get by the user id
+# res = doc.get().to_dict()
 
 # Create an Event for notifying main thread.
 delete_done = threading.Event()
 
 # Create a callback on_snapshot function to capture changes
+
+
 def on_snapshot(col_snapshot, changes, read_time):
     for change in changes:
+
         if change.type.name == 'ADDED':
             print(f'New user: {change.document.id}')
             sio.emit('newInscricao', "teste1 - " + change.document.id)
         elif change.type.name == 'MODIFIED':
             print(f'Modified user: {change.document.id}')
             doc_dict = change.document.to_dict()
-            json_object = json.dumps(doc_dict, indent = 4)
-            #with open("sample.json", "w") as outfile:
-            #    json.dump(json_object, outfile)
-            sio.emit('newInscricao', "teste2 - " + doc_dict["imageFRurl"])
+            doc_dict['user_id'] = change.document.id
+            json_object = json.dumps(doc_dict, indent=4)
 
-            #fazer download da imagem, talvez chamar uma funcao para tratar disso
-            #doc_dict["imageFRurl"]
+            # with open("sample.json", "w") as outfile:
+            # fazer download da imagem, talvez chamar uma funcao para tratar disso
+            download_image_to_train(change.document.id)
+            # treinar
+            # train(0)
+            # doc_dict["imageFRurl"]
         elif change.type.name == 'REMOVED':
             print(f'Removed user: {change.document.id}')
             sio.emit('newInscricao', "teste3 - " + change.document.id)
             delete_done.set()
 
-col_query = db.collection(u'user')
 
+col_query = db.collection(u'user')
+bucket = storage.bucket()
 # Watch the collection query
 query_watch = col_query.on_snapshot(on_snapshot)
+
+
+def download_image_to_train(user_id):
+    # Obter a referencia da imagem
+    blob = bucket.blob('images/'+user_id+'.png')
+    # Download
+    local_folder = './images_input'
+    folder_path = f'{local_folder}/{user_id}'
+    if not os.path.exists(folder_path):
+        # If the folder does not exist, create it
+        os.makedirs(folder_path)
+    image_path = f'{folder_path}/0.png'
+
+    blob.download_to_filename(image_path)
+
+
+def fetch_userData(user_id):
+    doc = col_query.document(user_id).get()
+    json_object = json.dumps(doc.to_dict(), indent=4)
+    sio.emit('NEW_RECOGNIZED_USER', json_object)
 
 
 # Get a reference to webcam #0 (the default one)
@@ -72,7 +106,7 @@ pickleFile = pickle.loads(f)
 encodings = (pickleFile['encodings'])
 names_raw = (pickleFile['names'])
 
-#add time until ask for next request
+# add time until ask for next request
 names = []
 for n in names_raw:
     names.append(Name(n))
@@ -109,9 +143,11 @@ while True:
             if matches[best_match_index]:
                 name = names[best_match_index].name
                 if (datetime.now() - names[best_match_index].time).seconds > 10:
-                    sio.emit('NEW_RECOGNIZED_USER', name)
+                    # Martelado
+                    fetch_userData("fy8FJ5bSxSAOH5FIWT7b")
+
                     names[best_match_index].time = datetime.now()
-                
+
             face_names.append(name)
 
     process_this_frame = not process_this_frame
