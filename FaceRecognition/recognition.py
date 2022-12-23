@@ -55,6 +55,18 @@ def fetch_userData(user_id):
     json_object = json.dumps(doc.to_dict(), indent=4)
     sio.emit('NEW_RECOGNIZED_USER', json_object)
 
+def declareFaces():
+    global picleDir, encodings, names_raw, names
+    encodings = []
+    names_raw = []
+    names = []
+    f = open("pickleData/data", "rb").read()
+    pickleFile = pickle.loads(f)
+    encodings = (pickleFile['encodings'])
+    names_raw = (pickleFile['names'])
+    for n in names_raw:
+        names.append(Name(n))
+
 
 class Name:
     name = ''
@@ -95,15 +107,9 @@ video_capture = cv2.VideoCapture(0)
 picleDir = 'pickleData/'
 encodings = []
 names_raw = []
-f = open("pickleData/data", "rb").read()
-pickleFile = pickle.loads(f)
-encodings = (pickleFile['encodings'])
-names_raw = (pickleFile['names'])
-
-# add time until ask for next request
 names = []
-for n in names_raw:
-    names.append(Name(n))
+
+declareFaces()
 
 # Initialize some variables
 face_locations = []
@@ -111,9 +117,14 @@ face_encodings = []
 face_names = []
 process_this_frame = True
 
+returned = False
+
 while True:
-    # Grab a single frame of video
     if not modifiying.is_set():
+        if returned:
+            declareFaces()
+            returned = False
+        # Grab a single frame of video
         ret, frame = video_capture.read()
 
         # Only process every other frame of video to save time
@@ -171,6 +182,8 @@ while True:
         # Hit 'q' on the keyboard to quit!
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+    else:
+        returned = True
 
 # Release handle to the webcam
 video_capture.release()
