@@ -14,7 +14,9 @@ import threading
 import json
 from trainDef import *
 
-#To download the images
+# To download the images
+
+
 def download_image_to_train(user_id):
     # Obter a referencia da imagem
     blob = bucket.blob('images/'+user_id+'.png')
@@ -30,6 +32,8 @@ def download_image_to_train(user_id):
     train(False)
 
 # Create a callback on_snapshot function to capture changes
+
+
 def on_snapshot(col_snapshot, changes, read_time):
     for change in changes:
         if change.type.name == 'ADDED':
@@ -47,13 +51,18 @@ def on_snapshot(col_snapshot, changes, read_time):
 
         elif change.type.name == 'REMOVED':
             print(f'Removed user: {change.document.id}')
-            #chamar funcao para apagar os dados de imagem
+            # chamar funcao para apagar os dados de imagem
 
-#Socket notification that user is on FR
+# Socket notification that user is on FR
+
+
 def fetch_userData(user_id):
     doc = col_query.document(user_id).get()
-    json_object = json.dumps(doc.to_dict(), indent=4)
+    doc_dict = doc.to_dict()
+    doc_dict['user_id'] = user_id
+    json_object = json.dumps(doc_dict, indent=4)
     sio.emit('NEW_RECOGNIZED_USER', json_object)
+
 
 def declareFaces():
     global picleDir, encodings, names_raw, names
@@ -76,7 +85,8 @@ class Name:
         self.name = name
         self.time = datetime.now()
 
-#main
+# main
+
 
 sio = socketio.Client()
 sio.connect('http://localhost:8081')
@@ -124,7 +134,7 @@ while True:
     ret, frame = video_capture.read()
     # Only process every other frame of video to save time
     if process_this_frame:
-        #make decision on what to do
+        # make decision on what to do
         if modifiying.is_set():
             returned = True
             continue
@@ -173,7 +183,7 @@ while True:
 
         # Draw a label with a name below the face
         cv2.rectangle(frame, (left, bottom - 35),
-                    (right, bottom), (0, 0, 255), cv2.FILLED)
+                      (right, bottom), (0, 0, 255), cv2.FILLED)
         font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(frame, name, (left + 6, bottom - 6),
                     font, 1.0, (255, 255, 255), 1)
