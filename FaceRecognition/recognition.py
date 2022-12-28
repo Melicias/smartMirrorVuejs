@@ -1,64 +1,114 @@
 import face_recognition
 import cv2
 import numpy as np
+import os
 from sklearn import svm
 import pickle
 import socketio
 from datetime import datetime
 import firebase_admin
 from firebase_admin import db
-from firebase_admin import firestore 
+from firebase_admin import firestore
+from firebase_admin import storage
 import threading
 import json
+from trainDef import *
 
-class Name:
-    name = ''
-    time = ''
-    def __init__(self, name):  
-        self.name = name
-        self.time = datetime.now()
+# To download the images
 
-sio = socketio.Client()
-sio.connect('http://localhost:8081')
 
-#connect to database firebase
-cred_obj = firebase_admin.credentials.Certificate('privateKeyFirebase.json')
-default_app = firebase_admin.initialize_app(cred_obj, {
-	'databaseURL':'https://rasp-mestrado.firebaseio.com/' })
-db = firestore.client() 
-#collection = db.collection('user') 
-#doc = collection.document('fy8FJ5bSxSAOH5FIWT7b') #get by the user id
-#res = doc.get().to_dict()
+def download_image_to_train(user_id):
+    # Obter a referencia da imagem
+    blob = bucket.blob('images/'+user_id+'.png')
+    # Download
+    local_folder = './images_input'
+    folder_path = f'{local_folder}/{user_id}'
+    if not os.path.exists(folder_path):
+        # If the folder does not exist, create it
+        os.makedirs(folder_path)
+    image_path = f'{folder_path}/0.png'
 
-# Create an Event for notifying main thread.
-delete_done = threading.Event()
+    blob.download_to_filename(image_path)
+    train(False)
 
 # Create a callback on_snapshot function to capture changes
+
+
 def on_snapshot(col_snapshot, changes, read_time):
     for change in changes:
         if change.type.name == 'ADDED':
             print(f'New user: {change.document.id}')
             sio.emit('newInscricao', "teste1 - " + change.document.id)
+
         elif change.type.name == 'MODIFIED':
             print(f'Modified user: {change.document.id}')
-            doc_dict = change.document.to_dict()
-            json_object = json.dumps(doc_dict, indent = 4)
-            #with open("sample.json", "w") as outfile:
-            #    json.dump(json_object, outfile)
-            sio.emit('newInscricao', "teste2 - " + doc_dict["imageFRurl"])
+            #doc_dict = change.document.to_dict()
+            #doc_dict['user_id'] = change.document.id
+            #json_object = json.dumps(doc_dict, indent=4)
+            modifiying.set()
+            download_image_to_train(change.document.id)
+            modifiying.clear()
 
-            #fazer download da imagem, talvez chamar uma funcao para tratar disso
-            #doc_dict["imageFRurl"]
         elif change.type.name == 'REMOVED':
             print(f'Removed user: {change.document.id}')
-            sio.emit('newInscricao', "teste3 - " + change.document.id)
-            delete_done.set()
+            # chamar funcao para apagar os dados de imagem
+
+# Socket notification that user is on FR
+
+
+def fetch_userData(user_id):
+    doc = col_query.document(user_id).get()
+    doc_dict = doc.to_dict()
+    doc_dict['user_id'] = user_id
+    json_object = json.dumps(doc_dict, indent=4)
+    sio.emit('NEW_RECOGNIZED_USER', json_object)
+
+
+def declareFaces():
+    global picleDir, encodings, names_raw, names
+    encodings = []
+    names_raw = []
+    names = []
+    f = open("pickleData/data", "rb").read()
+    pickleFile = pickle.loads(f)
+    encodings = (pickleFile['encodings'])
+    names_raw = (pickleFile['names'])
+    for n in names_raw:
+        names.append(Name(n))
+
+
+class Name:
+    name = ''
+    time = ''
+
+    def __init__(self, name):
+        self.name = name
+        self.time = datetime.now()
+
+# main
+
+
+sio = socketio.Client()
+sio.connect('http://localhost:8081')
+
+# connect to database firebase
+cred_obj = firebase_admin.credentials.Certificate('privateKeyFirebase.json')
+default_app = firebase_admin.initialize_app(cred_obj, {
+    'databaseURL': 'https://rasp-mestrado.firebaseio.com/',
+    'storageBucket': 'rasp-mestrado.appspot.com'
+})
+db = firestore.client()
+# collection = db.collection('user')
+# doc = collection.document('fy8FJ5bSxSAOH5FIWT7b') #get by the user id
+# res = doc.get().to_dict()
+
+# Create an Event for notifying main thread.
+modifiying = threading.Event()
 
 col_query = db.collection(u'user')
-
+bucket = storage.bucket()
 # Watch the collection query
 query_watch = col_query.on_snapshot(on_snapshot)
-
 
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
@@ -67,15 +117,9 @@ video_capture = cv2.VideoCapture(0)
 picleDir = 'pickleData/'
 encodings = []
 names_raw = []
-f = open("pickleData/data", "rb").read()
-pickleFile = pickle.loads(f)
-encodings = (pickleFile['encodings'])
-names_raw = (pickleFile['names'])
-
-#add time until ask for next request
 names = []
-for n in names_raw:
-    names.append(Name(n))
+
+declareFaces()
 
 # Initialize some variables
 face_locations = []
@@ -83,12 +127,20 @@ face_encodings = []
 face_names = []
 process_this_frame = True
 
+returned = False
+
 while True:
     # Grab a single frame of video
     ret, frame = video_capture.read()
-
     # Only process every other frame of video to save time
     if process_this_frame:
+        # make decision on what to do
+        if modifiying.is_set():
+            returned = True
+            continue
+        if returned:
+            declareFaces()
+            returned = False
         # Resize frame of video to 1/4 size for faster face recognition processing
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
@@ -109,9 +161,11 @@ while True:
             if matches[best_match_index]:
                 name = names[best_match_index].name
                 if (datetime.now() - names[best_match_index].time).seconds > 10:
-                    sio.emit('newInscricao', name)
+                    # Martelado
+                    fetch_userData("fy8FJ5bSxSAOH5FIWT7b")
+
                     names[best_match_index].time = datetime.now()
-                
+
             face_names.append(name)
 
     process_this_frame = not process_this_frame

@@ -8,6 +8,7 @@ import {
   CommitOptions,
   DispatchOptions,
 } from "vuex";
+
 import socket from "../../services/socket";
 import store, { State as RootState } from "@/store";
 
@@ -82,7 +83,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
   ) {
     try {
       socket.connect();
-      socket.on("newInscricao", (data) => store.dispatch("UPDATE_USER", data));
+      socket.on("NEW_RECOGNIZED_USER", (data) => store.dispatch("UPDATE_USER", data));
       store.commit("SET_SOCKET_CONNECTION");
     } catch (err) {
       // some error handling logic

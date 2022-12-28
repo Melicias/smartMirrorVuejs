@@ -1,5 +1,6 @@
 let config = {
   paths: "../src/components/Modules",
+  user_id: "default",
   modules: [
     {
       module: "CalendarWidget",
@@ -23,9 +24,7 @@ let config = {
         width: 3,
         height: 11,
       },
-      config: {
-        
-      },
+      config: {},
     },
     {
       module: "NewsWidget",
@@ -37,9 +36,7 @@ let config = {
         width: 14,
         height: 4,
       },
-      config: {
-        
-      },
+      config: {},
     },
     {
       module: "WeatherWidget",
@@ -51,9 +48,7 @@ let config = {
         width: 9,
         height: 6,
       },
-      config: {
-        
-      },
+      config: {},
     },
     {
       module: "generateWifiQRCode",
@@ -65,9 +60,7 @@ let config = {
         width: 2,
         height: 5,
       },
-      config: {
-        
-      },
+      config: {},
     },
     {
       module: "WaterWidget",
@@ -79,9 +72,7 @@ let config = {
         width: 12,
         height: 1,
       },
-      config: {
-        
-      },
+      config: {},
     },
   ],
 };

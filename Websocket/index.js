@@ -1,3 +1,5 @@
+const { generateJsFile } = require("./generate_file");
+
 const httpServer = require("http").createServer();
 const io = require("socket.io")(httpServer, {
   allowEIO3: true,
@@ -11,12 +13,19 @@ httpServer.listen(8081, function () {
   console.log("listening on *:8081");
 });
 io.on("connection", function (socket) {
-  console.log(`client ${socket.id},${socket.localAddress}, ${socket.localPort} has connected`);
-});
+  //check socket connection
+  console.log(
+    `client ${socket.id},${socket.localAddress}, ${socket.localPort} has connected`
+  );
+  socket.on("NEW_RECOGNIZED_USER", (response) => {
+    userData = JSON.parse(response);
+    generateJsFile(userData);
+    socket.broadcast.emit("NEW_RECOGNIZED_USER", response);
+  });
 
-io.on("connection", function (socket) {
-  socket.on("newInscricao", function (response) {
-    console.log(response);
-    socket.broadcast.emit("newInscricao", response);
+  socket.on("NEW_USE_UPDATE", (response) => {
+    userData = JSON.parse(response);
+    generateJsFile(userData);
+    socket.broadcast.emit("updateUser", response);
   });
 });
