@@ -14,18 +14,18 @@ let config = {
       },
       config: {},
     },
-    {
-      module: "SpotifyPlayer",
-      position: {
-        x: 17,
-        y: 6,
-      },
-      size: {
-        width: 3,
-        height: 11,
-      },
-      config: {},
-    },
+    // {
+    //   module: "SpotifyPlayer",
+    //   position: {
+    //     x: 17,
+    //     y: 6,
+    //   },
+    //   size: {
+    //     width: 3,
+    //     height: 11,
+    //   },
+    //   config: {},
+    // },
     {
       module: "NewsWidget",
       position: {
