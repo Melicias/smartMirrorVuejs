@@ -59,6 +59,7 @@ def on_snapshot(col_snapshot, changes, read_time):
 def fetch_userData(user_id):
     doc = col_query.document(user_id).get()
     doc_dict = doc.to_dict()
+    print(user_id)
     doc_dict['user_id'] = user_id
     json_object = json.dumps(doc_dict, indent=4)
     sio.emit('NEW_RECOGNIZED_USER', json_object)
@@ -162,8 +163,10 @@ while True:
                 name = names[best_match_index].name
                 if (datetime.now() - names[best_match_index].time).seconds > 10:
                     # Martelado
-                    fetch_userData("fy8FJ5bSxSAOH5FIWT7b")
-
+                    print(name)
+                    if not name.startswith("noise"):
+                        fetch_userData(name)
+                
                     names[best_match_index].time = datetime.now()
 
             face_names.append(name)

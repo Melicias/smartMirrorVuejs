@@ -2,7 +2,7 @@ const { promises, unlinkSync } = require("fs");
 const { join } = require("path");
 
 const path = "../vue/config";
-var timeOut;
+var timeOut=[];
 
 const generateJsFile = async (userData) => {
   console.dir("userData" + userData);
@@ -52,11 +52,12 @@ const get_modules = (rawModule) => {
 };
 
 const userTimeOut = (user_id) => {
-  clearTimeout(timeOut);
+  clearTimeout(timeOut?.find(x=>x.key==user_id)?.timer);
   var filename = user_id + ".js";
-  timeOut = setTimeout(function () {
+  var auxtimeOut = setTimeout(function () {
     unlinkSync(join(path, filename));
-  }, 180 * 1000);
+  }, 20 * 1000);
+  timeOut.push({key:user_id,timer:auxtimeOut});
 };
 
 module.exports = { generateJsFile };
