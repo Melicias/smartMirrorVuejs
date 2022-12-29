@@ -1,49 +1,58 @@
 <template>
   <body>
-    <grid-layout
-      class=""
-      v-model:layout="layout"
-      :col-num="this.col"
-      :row-height="this.row"
-      :is-draggable="draggable"
-      :is-resizable="resizable"
-      :responsive="false"
-      :vertical-compact="false"
-      :prevent-collision="true"
-      :use-css-transforms="true"
-      :autoSize="true"
-      :margin="margin"
-      :is-bounded="true"
-    >
-      <template #default="{ gridItemProps }">
-        <!-- | gridItemProps props from GridLayout | -->
-        <!--breakpointCols: props.cols-->
-        <!--colNum: props.colNum-->
-        <!--containerWidth: width.value-->
-        <!--isDraggable: props.isDraggable-->
-        <!--isResizable: props.isResizable-->
-        <!--lastBreakpoint: lastBreakpoint.value-->
-        <!--margin: props.margin-->
-        <!--maxRows: props.maxRows-->
-        <!--responsive: props.responsive-->
-        <!--rowHeight: props.rowHeight-->
-        <!--useCssTransforms: props.useCssTransforms-->
-        <!--width: width.value-->
-        <grid-item
-          class="vue-grid-item"
-          v-for="item in layout"
-          :key="item.i"
-          v-bind="gridItemProps"
-          :x="item.x"
-          :y="item.y"
-          :w="item.w"
-          :h="item.h"
-          :i="item.i"
-        >
-          <component :is="item.d" :config="item.config"></component>
-        </grid-item>
-      </template>
-    </grid-layout>
+    <div :class="{ wrapper: modules?.length >= 2 }">
+      <div v-for="message in modules" :key="message">
+        <div v-for="module in message" :key="module">
+          <grid-layout
+            :layout="layout"
+            :col-num="this.col"
+            :row-height="this.row"
+            :is-draggable="draggable"
+            :is-resizable="resizable"
+            :responsive="false"
+            :vertical-compact="false"
+            :prevent-collision="true"
+            :use-css-transforms="true"
+            :autoSize="true"
+            :margin="margin"
+            :is-bounded="true"
+          >
+            <template #default="{ gridItemProps }">
+              <!-- | gridItemProps props from GridLayout | -->
+              <!--breakpointCols: props.cols-->
+              <!--colNum: props.colNum-->
+              <!--containerWidth: width.value-->
+              <!--isDraggable: props.isDraggable-->
+              <!--isResizable: props.isResizable-->
+              <!--lastBreakpoint: lastBreakpoint.value-->
+              <!--margin: props.margin-->
+              <!--maxRows: props.maxRows-->
+              <!--responsive: props.responsive-->
+              <!--rowHeight: props.rowHeight-->
+              <!--useCssTransforms: props.useCssTransforms-->
+              <!--width: width.value-->
+              <grid-item
+                class="vue-grid-item"
+                v-for="item in module"
+                :key="item.index"
+                v-bind="gridItemProps"
+                :x="item.position.x"
+                :y="item.position.y"
+                :w="item.size.width"
+                :h="item.size.height"
+                :i="item.index"
+              >
+                <component
+                  :is="item.name"
+                  :config="item.config"
+                  :class="{ replaced: modules?.length >= 2 }"
+                ></component>
+              </grid-item>
+            </template>
+          </grid-layout>
+        </div>
+      </div>
+    </div>
   </body>
 </template>
 <script>
@@ -63,6 +72,7 @@ export default {
       col: 20,
       row: 30,
       layout: [],
+      modules: [],
       draggable: true,
       resizable: false,
       time: 0,
@@ -70,10 +80,8 @@ export default {
     };
   },
   created() {
-    var teste = new APIService();
-    teste.getUserConfig();
-    var Modules = Loader()();
-    Modules.forEach((module) => {
+    this.modules = Loader()();
+    this.modules.forEach((module) => {
       for (let key in module) {
         module[key].forEach((x) => {
           const newModule = {
@@ -93,10 +101,23 @@ export default {
   mounted() {
     store.dispatch("CONNECT");
   },
+  methods: {
+    getLog(msg) {
+      console.log(msg);
+    },
+  },
 };
 </script>
 
 <style scoped>
+.replaced {
+  transform: scale(0.5);
+}
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 .vue-grid-layout {
   background: rgb(216, 6, 6);
 }
