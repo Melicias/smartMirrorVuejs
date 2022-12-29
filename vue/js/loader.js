@@ -3,7 +3,16 @@ import config from "../config/default";
 var cache = [];
 
 function importAll(r) {
-  r.keys().forEach((key) => cache.push(r(key)));
+  if (r.keys().length > 1) {
+    // isto quer dizer que ha mais que 1 config na pasta.
+    r.keys()
+      .filter((v) => v != "./default.js")
+      .forEach((key) => {
+        cache.push(r(key));
+      });
+  } else {
+    r.keys().forEach((key) => cache.push(r(key)));
+  }
 }
 importAll(require.context("../config/", true, /.js$/));
 
