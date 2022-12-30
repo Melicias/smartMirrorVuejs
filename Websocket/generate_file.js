@@ -60,7 +60,7 @@ const userTimeOut = (user_id) => {
       unlinkSync(join(path, filename));
     }
     timeOut = timeOut.filter(x=>x.key !== user_id);
-  }, 20 * 1000);
+  }, 60 * 1000);
   if(!timeOut.some(obj => obj.key == user_id))
     timeOut.push({key:user_id,timer:auxtimeOut});
 };
