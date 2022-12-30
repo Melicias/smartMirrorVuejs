@@ -15,8 +15,6 @@ import json
 from trainDef import *
 
 # To download the images
-
-
 def download_image_to_train(user_id):
     # Obter a referencia da imagem
     blob = bucket.blob('images/'+user_id+'.png')
@@ -32,8 +30,6 @@ def download_image_to_train(user_id):
     train(False)
 
 # Create a callback on_snapshot function to capture changes
-
-
 def on_snapshot(col_snapshot, changes, read_time):
     for change in changes:
         if change.type.name == 'ADDED':
@@ -54,15 +50,13 @@ def on_snapshot(col_snapshot, changes, read_time):
             # chamar funcao para apagar os dados de imagem
 
 # Socket notification that user is on FR
-
-
 def fetch_userData(user_id):
     doc = col_query.document(user_id).get()
     doc_dict = doc.to_dict()
+    print(user_id)
     doc_dict['user_id'] = user_id
     json_object = json.dumps(doc_dict, indent=4)
     sio.emit('NEW_RECOGNIZED_USER', json_object)
-
 
 def declareFaces():
     global picleDir, encodings, names_raw, names
@@ -76,7 +70,6 @@ def declareFaces():
     for n in names_raw:
         names.append(Name(n))
 
-
 class Name:
     name = ''
     time = ''
@@ -86,8 +79,6 @@ class Name:
         self.time = datetime.now()
 
 # main
-
-
 sio = socketio.Client()
 sio.connect('http://localhost:8081')
 
@@ -114,26 +105,18 @@ query_watch = col_query.on_snapshot(on_snapshot)
 video_capture = cv2.VideoCapture(0)
 
 # Create arrays of known face encodings and their names
-picleDir = 'pickleData/'
-encodings = []
-names_raw = []
-names = []
-
+picleDir = 'pickleData/'; encodings = []; names_raw = []; names = []
 declareFaces()
-
 # Initialize some variables
-face_locations = []
-face_encodings = []
-face_names = []
-process_this_frame = True
-
-returned = False
+face_locations = []; face_encodings = []; face_names = []; process_this_frame = 0; returned = False
 
 while True:
     # Grab a single frame of video
     ret, frame = video_capture.read()
     # Only process every other frame of video to save time
-    if process_this_frame:
+    process_this_frame += 1
+    if process_this_frame == 10:
+        process_this_frame = 0
         # make decision on what to do
         if modifiying.is_set():
             returned = True
@@ -148,49 +131,37 @@ while True:
 
         # Find all the faces and face encodings in the current frame of video
         face_locations = face_recognition.face_locations(rgb_small_frame)
-        face_encodings = face_recognition.face_encodings(
-            rgb_small_frame, face_locations)
+        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
         face_names = []
         for face_encoding in face_encodings:
             matches = face_recognition.compare_faces(encodings, face_encoding)
             name = "Unknown"
             # Or instead, use the known face with the smallest distance to the new face
-            face_distances = face_recognition.face_distance(
-                encodings, face_encoding)
+            face_distances = face_recognition.face_distance(encodings, face_encoding)
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
                 name = names[best_match_index].name
                 if (datetime.now() - names[best_match_index].time).seconds > 10:
-                    # Martelado
-                    fetch_userData("fy8FJ5bSxSAOH5FIWT7b")
-
+                    if not name.startswith("noise"):
+                        fetch_userData(name)
                     names[best_match_index].time = datetime.now()
-
             face_names.append(name)
-
-    process_this_frame = not process_this_frame
 
     # Display the results
     for (top, right, bottom, left), name in zip(face_locations, face_names):
         # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4
-        right *= 4
-        bottom *= 4
-        left *= 4
+        top *= 4; right *= 4; bottom *= 4; left *= 4
 
         # Draw a box around the face
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
         # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 35),
-                      (right, bottom), (0, 0, 255), cv2.FILLED)
+        cv2.rectangle(frame, (left, bottom - 35),(right, bottom), (0, 0, 255), cv2.FILLED)
         font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6),
-                    font, 1.0, (255, 255, 255), 1)
+        cv2.putText(frame, name, (left + 6, bottom - 6),font, 1.0, (255, 255, 255), 1)
 
     # Display the resulting image
     cv2.imshow('Video', frame)
-
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

@@ -17,7 +17,7 @@ def train(fullTrain):
             if file.endswith("png") or file.endswith("jpg"):
                 path = os.path.join(root, file)
                 print(image_dir)
-                label = os.path.basename(root).replace(" ", "-").lower()
+                label = os.path.basename(root).replace(" ", "-")#.lower()
                 face = face_recognition.load_image_file(path)
                 face_bounding_boxes = face_recognition.face_locations(face)
                 # If training image contains exactly one face
