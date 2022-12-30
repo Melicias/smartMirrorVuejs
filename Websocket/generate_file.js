@@ -53,7 +53,9 @@ const get_modules = (rawModule) => {
 };
 
 const userTimeOut = (user_id) => {
-  clearTimeout(timeOut?.find(x=>x.key==user_id)?.timer);
+  if(timeOut.length){
+    clearTimeout(timeOut.find(x=>x.key==user_id).timer);
+  }
   var filename = user_id + ".js";
   var auxtimeOut = setTimeout(function () {
     if (fs.existsSync(join(path, filename))) { 
