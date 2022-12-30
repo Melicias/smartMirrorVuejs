@@ -1,6 +1,7 @@
 const { promises, unlinkSync } = require("fs");
 const { join } = require("path");
 
+const fs = require('fs');
 const path = "../vue/config";
 var timeOut=[];
 
@@ -55,9 +56,13 @@ const userTimeOut = (user_id) => {
   clearTimeout(timeOut?.find(x=>x.key==user_id)?.timer);
   var filename = user_id + ".js";
   var auxtimeOut = setTimeout(function () {
-    unlinkSync(join(path, filename));
+    if (fs.existsSync(join(path, filename))) { 
+      unlinkSync(join(path, filename));
+    }
+    timeOut = timeOut.filter(x=>x.key !== user_id);
   }, 20 * 1000);
-  timeOut.push({key:user_id,timer:auxtimeOut});
+  if(!timeOut.some(obj => obj.key == user_id))
+    timeOut.push({key:user_id,timer:auxtimeOut});
 };
 
 module.exports = { generateJsFile };
