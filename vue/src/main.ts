@@ -8,6 +8,7 @@ import VueSplide from "@splidejs/vue-splide";
 import "v-calendar/dist/style.css";
 import "@fontsource/roboto";
 import socket from "./services/socket";
+import store from "./store";
 
 import { library, dom } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -16,4 +17,9 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 library.add(fas);
 dom.watch();
 
-createApp(App).use(GridLayout).use(VCalendar, {}).use(VueSplide).mount("#app");
+createApp(App)
+  .use(GridLayout)
+  .use(VCalendar, {})
+  .use(VueSplide)
+  .use(store)
+  .mount("#app");

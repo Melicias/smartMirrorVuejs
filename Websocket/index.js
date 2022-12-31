@@ -28,4 +28,9 @@ io.on("connection", function (socket) {
     generateJsFile(userData);
     socket.broadcast.emit("updateUser", response);
   });
+
+  socket.on("HAND_TRACK", (response) => {
+    console.log(response);
+    socket.broadcast.emit("HAND_TRACK", response);
+  });
 });

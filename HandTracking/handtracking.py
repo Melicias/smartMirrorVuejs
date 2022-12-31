@@ -2,16 +2,22 @@ import cv2
 import mediapipe as mp
 import time
 import math
-cap = cv2.VideoCapture(0)
+import socketio
+# main
+sio = socketio.Client()
+sio.connect('http://localhost:8081')
 
+
+cap = cv2.VideoCapture(0)
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
 mp_draw = mp.solutions.drawing_utils
-
 prev_time = 0
 cur_time = 0
-
 prev_x, prev_y = 0, 0
+prev_prev_x, prev_prev_y = 0, 0
+RIGHT_MOVE = 0
+LEFT_MOVE = 1
 while True:
     _, img = cap.read()
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -27,13 +33,18 @@ while True:
             x, y = index_finger_landmark.x, index_finger_landmark.y
             cx, cy = int(x * width), int(y * height)
             cv2.circle(img, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
-            dist = abs(cx-prev_x)
-
-            if cx > prev_x and dist > 20:
+            threshold = 0.2*width
+            t = time.time()
+            t_ms = int(t * 1000)
+            if cx > prev_x + threshold and cx > prev_prev_x + threshold:
                 print("Index finger moved to the right")
-            elif cx < prev_x and dist > 20:
+                sio.emit('HAND_TRACK', {"movement": RIGHT_MOVE, "time": t_ms})
+            elif cx < prev_x - threshold and cx < prev_prev_x - threshold:
                 print("Index finger moved to the left")
+                sio.emit('HAND_TRACK', {"movement": LEFT_MOVE, "time": t_ms})
             prev_x, prev_y = cx, cy
+            prev_prev_x = prev_x
+            prev_prev_y = prev_y
             # for index, lm in enumerate(hand_landmarks.landmark):
 
             # height, width, channel = img.shape

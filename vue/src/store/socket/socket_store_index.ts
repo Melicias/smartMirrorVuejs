@@ -16,6 +16,7 @@ import store, { State as RootState } from "@/store";
 export type State = {
   isConnected: boolean;
   authUser: string;
+  swiping: { movement: number; t_ms: number | null } | null;
 };
 export type Payload = {
   data: any;
@@ -25,18 +26,21 @@ export type Payload = {
 const state: State = {
   isConnected: false,
   authUser: "",
+  swiping: null,
 };
 
 // mutations enums
 export enum MutationTypes {
   SET_SOCKET_CONNECTION = "SET_SOCKET_CONNECTION",
   SET_AUTH_USER = "SET_AUTH_USER",
+  SET_SWIPING = "SET_SWIPING",
 }
 
 // Mutation contracts
 export type Mutations<S = State, P = Payload> = {
   [MutationTypes.SET_SOCKET_CONNECTION](state: S): void;
   [MutationTypes.SET_AUTH_USER](state: S, payload: P): void;
+  [MutationTypes.SET_SWIPING](state: S, payload: P): void;
 };
 // Define mutations
 const mutations: MutationTree<State> & Mutations = {
@@ -47,12 +51,20 @@ const mutations: MutationTree<State> & Mutations = {
     console.log(payload);
     state.authUser = payload.toString();
   },
+  [MutationTypes.SET_SWIPING](state: State, payload: any) {
+    console.log(payload);
+    state.swiping = {
+      movement: +payload.movement,
+      t_ms: +payload.movement,
+    };
+  },
 };
 
 // Action enums
 export enum ActionTypes {
   CONNECT = "CONNECT",
   UPDATE_USER = "UPDATE_USER",
+  UPDATE_SWIPING = "UPDATE_SWIPING",
 }
 
 // Actions context
@@ -73,6 +85,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: { username: string }
   ): void;
+  [ActionTypes.UPDATE_SWIPING](
+    { commit }: AugmentedActionContext,
+    payload: { swiping: number }
+  ): void;
 }
 
 // Define actions
@@ -83,7 +99,11 @@ export const actions: ActionTree<State, RootState> & Actions = {
   ) {
     try {
       socket.connect();
-      socket.on("NEW_RECOGNIZED_USER", (data) => store.dispatch("UPDATE_USER", data));
+      store.dispatch("UPDATE_SWIPING");
+      socket.on("NEW_RECOGNIZED_USER", (data) => {
+        store.dispatch("UPDATE_USER", data);
+        store.dispatch("UPDATE_SWIPING");
+      });
       store.commit("SET_SOCKET_CONNECTION");
     } catch (err) {
       // some error handling logic
@@ -96,12 +116,23 @@ export const actions: ActionTree<State, RootState> & Actions = {
       // some error handling logic
     }
   },
+  async [ActionTypes.UPDATE_SWIPING]({ commit }, payload: { swiping: number }) {
+    try {
+      console.log("handTrackUpaUPa");
+      socket.on("HAND_TRACK", (data) => {
+        store.commit("SET_SWIPING", data);
+      });
+    } catch (err) {
+      // some error handling logic
+    }
+  },
 };
 
 // getters types
 export type Getters = {
   isConnected(state: State): boolean;
   authUser(state: State): string;
+  swiping(state: State): { movement: number; t_ms: number | null } | null;
 };
 
 // getters
@@ -111,6 +142,9 @@ export const getters: GetterTree<State, RootState> & Getters = {
   },
   authUser: (state) => {
     return state.authUser;
+  },
+  swiping: (state) => {
+    return state.swiping;
   },
 };
 

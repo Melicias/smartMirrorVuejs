@@ -30,7 +30,7 @@ let config = {
       module: "NewsWidget",
       position: {
         x: 3,
-        y: 21,
+        y: 4,
       },
       size: {
         width: 14,
