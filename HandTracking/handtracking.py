@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 import time
-
+import math
 cap = cv2.VideoCapture(0)
 
 mp_hands = mp.solutions.hands
@@ -27,9 +27,11 @@ while True:
             x, y = index_finger_landmark.x, index_finger_landmark.y
             cx, cy = int(x * width), int(y * height)
             cv2.circle(img, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
-            if cx > prev_x:
+            dist = abs(cx-prev_x)
+
+            if cx > prev_x and dist > 20:
                 print("Index finger moved to the right")
-            elif cx < prev_x:
+            elif cx < prev_x and dist > 20:
                 print("Index finger moved to the left")
             prev_x, prev_y = cx, cy
             # for index, lm in enumerate(hand_landmarks.landmark):
