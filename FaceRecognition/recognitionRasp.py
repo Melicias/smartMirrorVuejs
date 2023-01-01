@@ -12,6 +12,7 @@ from firebase_admin import firestore
 from firebase_admin import storage
 import threading
 import json
+import filecmp
 from trainDef import *
 
 # To download the images
