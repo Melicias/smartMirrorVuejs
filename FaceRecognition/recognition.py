@@ -40,7 +40,7 @@ def download_image_to_train(user_id):
             train(False)
         else:
             print("descarregar ficheiro")
-            fetch_userData(user_id)
+            fetch_userData(user_id) #so fazer isto caso o ficheiro exista?! senao ele cria na mesma
 
 # Create a callback on_snapshot function to capture changes
 def on_snapshot(col_snapshot, changes, read_time):
