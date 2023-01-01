@@ -12,6 +12,7 @@ from firebase_admin import firestore
 from firebase_admin import storage
 import threading
 import json
+import filecmp
 from trainDef import *
 
 # To download the images
@@ -24,18 +25,29 @@ def download_image_to_train(user_id):
     if not os.path.exists(folder_path):
         # If the folder does not exist, create it
         os.makedirs(folder_path)
-    image_path = f'{folder_path}/0.png'
-
+    image_path_old = f'{folder_path}/0.png'
+    image_path = f'{folder_path}/01.png'
     blob.download_to_filename(image_path)
-    train(False)
+    
+    if not os.path.isfile(image_path_old):
+        #trocar o nome do ficheiro
+        os.rename(image_path, image_path_old)
+        train(False)
+    else:
+        if not filecmp.cmp(image_path_old, image_path):
+            #trocar o nome do ficheiro
+            os.rename(image_path, image_path_old)
+            train(False)
+        else:
+            print("descarregar ficheiro")
+            fetch_userData(user_id)
 
 # Create a callback on_snapshot function to capture changes
 def on_snapshot(col_snapshot, changes, read_time):
     for change in changes:
         if change.type.name == 'ADDED':
             print(f'New user: {change.document.id}')
-            sio.emit('newInscricao', "teste1 - " + change.document.id)
-
+            #sio.emit('newInscricao', "teste1 - " + change.document.id)
         elif change.type.name == 'MODIFIED':
             print(f'Modified user: {change.document.id}')
             #doc_dict = change.document.to_dict()
