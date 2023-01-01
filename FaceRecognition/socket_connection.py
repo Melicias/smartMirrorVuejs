@@ -7,6 +7,7 @@ sio.emit('NEW_RECOGNIZED_USER', {'foo': 'bar'})
 
 while True:
     @sio.on('NEW_RECOGNIZED_USER')
+    @sio.on('NEW_RECOGNIZED_USER_FOR_UPDATE')
     def on_connect(data):
         print("I'm connected to the /chat namespace!"+data)
     if 0xFF == ord('q'):

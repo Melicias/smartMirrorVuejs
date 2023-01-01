@@ -27,6 +27,8 @@ def download_image_to_train(user_id):
         os.makedirs(folder_path)
     image_path_old = f'{folder_path}/0.png'
     image_path = f'{folder_path}/01.png'
+    if not blob.exists():
+        return
     blob.download_to_filename(image_path)
     
     if not os.path.isfile(image_path_old):
@@ -40,7 +42,7 @@ def download_image_to_train(user_id):
             train(False)
         else:
             print("descarregar ficheiro")
-            fetch_userData(user_id)
+            fetch_userData(user_id,True)
 
 # Create a callback on_snapshot function to capture changes
 def on_snapshot(col_snapshot, changes, read_time):
@@ -62,13 +64,16 @@ def on_snapshot(col_snapshot, changes, read_time):
             # chamar funcao para apagar os dados de imagem
 
 # Socket notification that user is on FR
-def fetch_userData(user_id):
+def fetch_userData(user_id,isUpdate):
     doc = col_query.document(user_id).get()
     doc_dict = doc.to_dict()
     print(user_id)
     doc_dict['user_id'] = user_id
     json_object = json.dumps(doc_dict, indent=4)
-    sio.emit('NEW_RECOGNIZED_USER', json_object)
+    if isUpdate:
+        sio.emit('NEW_RECOGNIZED_USER_FOR_UPDATE', json_object)
+    else:
+        sio.emit('NEW_RECOGNIZED_USER', json_object)
 
 def declareFaces():
     global picleDir, encodings, names_raw, names
@@ -155,7 +160,7 @@ while True:
                 name = names[best_match_index].name
                 if (datetime.now() - names[best_match_index].time).seconds > 10:
                     if not name.startswith("noise"):
-                        fetch_userData(name)
+                        fetch_userData(name,False)
                     names[best_match_index].time = datetime.now()
             face_names.append(name)
 
