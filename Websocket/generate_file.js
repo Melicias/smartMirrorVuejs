@@ -63,7 +63,10 @@ const get_modules = (rawModule) => {
 const userTimeOut = (user_id) => {
   var filename = user_id + ".js";
   if (timeOut.length) {
-    clearTimeout(timeOut.find((x) => x.key == user_id).timer);
+    t = timeOut.find((x) => x.key == user_id)
+    if(t !== undefined){
+      clearTimeout(timeOut.find((x) => x.key == user_id).timer);
+    }
     timeOut = timeOut.filter((x) => x.key !== user_id);
   }
   var auxtimeOut = setTimeout(function () {
