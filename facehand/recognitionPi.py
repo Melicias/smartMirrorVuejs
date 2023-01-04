@@ -134,7 +134,6 @@ face_locations = []; face_encodings = []; face_names = []; process_this_frame = 
 mp_hands = mp.solutions.hands
 #hands = mp_hands.Hands()
 hands = mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confidence=0.5)
-mp_draw = mp.solutions.drawing_utils
 prev_time = 0
 cur_time = 0
 hand_id = 0
@@ -190,7 +189,6 @@ while True:
         height, width, channel = frame.shape
         x, y = index_finger_landmark.x, index_finger_landmark.y
         cx, cy = int(x * width), int(y * height)
-        cv2.circle(frame, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
         threshold = 0.2*width
         t = time.time()
         t_ms = int(t * 1000)
@@ -206,34 +204,3 @@ while True:
         prev_x, prev_y = cx, cy
         prev_prev_x = prev_x
         prev_prev_y = prev_y
-        # for index, lm in enumerate(hand_landmarks.landmark):
-
-        # height, width, channel = img.shape
-        # cx, cy = int(lm.x * width), int(lm.y * height)
-        # print(cx, cy)
-        # cv2.circle(img, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
-        mp_draw.draw_landmarks(frame, closest_hand,
-                                mp_hands.HAND_CONNECTIONS)
-
-    # Display the results
-    for (top, right, bottom, left), name in zip(face_locations, face_names):
-        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4; right *= 4; bottom *= 4; left *= 4
-
-        # Draw a box around the face
-        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-
-        # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 35),(right, bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6),font, 1.0, (255, 255, 255), 1)
-
-    # Display the resulting image
-    cv2.imshow('Video', frame)
-    # Hit 'q' on the keyboard to quit!
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-# Release handle to the webcam
-video_capture.release()
-cv2.destroyAllWindows()
