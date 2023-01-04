@@ -19,8 +19,11 @@ io.on("connection", function (socket) {
   );
   socket.on("NEW_RECOGNIZED_USER", (response) => {
     userData = JSON.parse(response);
-    generateJsFile(userData);
-    socket.broadcast.emit("NEW_RECOGNIZED_USER", response);
+    console.log(userData.user_id)
+    if(!isGenerateJsFile(userData)){
+      generateJsFile(userData);
+      socket.broadcast.emit("NEW_RECOGNIZED_USER", response);
+    }
   });
 
   socket.on("NEW_RECOGNIZED_USER_FOR_UPDATE", (response) => {
