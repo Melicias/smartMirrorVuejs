@@ -133,7 +133,7 @@ face_locations = []; face_encodings = []; face_names = []; process_this_frame = 
 
 mp_hands = mp.solutions.hands
 #hands = mp_hands.Hands()
-hands = mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confidence=0.5)
+hands = mp_hands.Hands(static_image_mode=False,max_num_hands=1)
 mp_draw = mp.solutions.drawing_utils
 prev_time = 0
 cur_time = 0
@@ -191,17 +191,15 @@ while True:
         x, y = index_finger_landmark.x, index_finger_landmark.y
         cx, cy = int(x * width), int(y * height)
         cv2.circle(frame, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
-        threshold = 0.2*width
-        t = time.time()
-        t_ms = int(t * 1000)
+        threshold = 0.05*width
         if (datetime.now() - timeFingers).seconds > 0.25:
             if cx > prev_x + threshold and cx > prev_prev_x + threshold:
                 print("Index finger moved to the right")
-                sio.emit('HAND_TRACK', {"movement": RIGHT_MOVE, "time": t_ms})
+                sio.emit('HAND_TRACK', {"movement": RIGHT_MOVE, "time": int(time.time() * 1000)})
                 timeFingers = datetime.now()
             elif cx < prev_x - threshold and cx < prev_prev_x - threshold:
                 print("Index finger moved to the left")
-                sio.emit('HAND_TRACK', {"movement": LEFT_MOVE, "time": t_ms})
+                sio.emit('HAND_TRACK', {"movement": LEFT_MOVE, "time": int(time.time() * 1000)})
                 timeFingers = datetime.now()
         prev_x, prev_y = cx, cy
         prev_prev_x = prev_x

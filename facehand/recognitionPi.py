@@ -133,12 +133,8 @@ face_locations = []; face_encodings = []; face_names = []; process_this_frame = 
 
 mp_hands = mp.solutions.hands
 #hands = mp_hands.Hands()
-hands = mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confidence=0.5)
-prev_time = 0
-cur_time = 0
-hand_id = 0
-prev_x, prev_y = 0, 0
-prev_prev_x, prev_prev_y = 0, 0
+hands = mp_hands.Hands(static_image_mode=False,max_num_hands=1)#, min_detection_confidence=0.5)
+prev_time, cur_time, hand_id, prev_x, prev_y, prev_prev_x, prev_prev_y = 0 , 0, 0, 0, 0, 0, 0
 RIGHT_MOVE = 0
 LEFT_MOVE = 1
 timeFingers = datetime.now()
@@ -189,18 +185,12 @@ while True:
         height, width, channel = frame.shape
         x, y = index_finger_landmark.x, index_finger_landmark.y
         cx, cy = int(x * width), int(y * height)
-        threshold = 0.2*width
-        t = time.time()
-        t_ms = int(t * 1000)
-        if (datetime.now() - timeFingers).seconds > 0.25:
-            if cx > prev_x + threshold and cx > prev_prev_x + threshold:
-                print("Index finger moved to the right")
-                sio.emit('HAND_TRACK', {"movement": RIGHT_MOVE, "time": t_ms})
-                timeFingers = datetime.now()
-            elif cx < prev_x - threshold and cx < prev_prev_x - threshold:
-                print("Index finger moved to the left")
-                sio.emit('HAND_TRACK', {"movement": LEFT_MOVE, "time": t_ms})
-                timeFingers = datetime.now()
+        threshold = 0.15*width
+        if cx > prev_x + threshold and cx > prev_prev_x + threshold:
+            print("Index finger moved to the right")
+            sio.emit('HAND_TRACK', {"movement": RIGHT_MOVE, "time": int(time.time() * 1000)})
+        elif cx < prev_x - threshold and cx < prev_prev_x - threshold:
+            print("Index finger moved to the left")
+            sio.emit('HAND_TRACK', {"movement": LEFT_MOVE, "time": int(time.time() * 1000)})
         prev_x, prev_y = cx, cy
-        prev_prev_x = prev_x
-        prev_prev_y = prev_y
+        prev_prev_x, prev_prev_y = prev_x, prev_y
