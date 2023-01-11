@@ -50,6 +50,7 @@ def download_image_to_train(user_id):
 
 # Create a callback on_snapshot function to capture changes
 def on_snapshot(col_snapshot, changes, read_time):
+    print("teste")
     for change in changes:
         if change.type.name == 'ADDED':
             print(f'New user: {change.document.id}')
@@ -105,6 +106,7 @@ sio.connect('http://localhost:8081')
 
 # connect to database firebase
 cred_obj = firebase_admin.credentials.Certificate('privateKeyFirebase.json')
+print(cred_obj)
 default_app = firebase_admin.initialize_app(cred_obj, {
     'databaseURL': 'https://rasp-mestrado.firebaseio.com/',
     'storageBucket': 'rasp-mestrado.appspot.com'
@@ -120,7 +122,9 @@ modifiying = threading.Event()
 col_query = db.collection(u'user')
 bucket = storage.bucket()
 # Watch the collection query
+
 query_watch = col_query.on_snapshot(on_snapshot)
+print(query_watch)
 
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)

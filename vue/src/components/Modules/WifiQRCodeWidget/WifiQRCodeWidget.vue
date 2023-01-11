@@ -33,9 +33,9 @@ export default {
   },
   created() {
     this.data=generateWifiQRCode({
-        ssid: process.env.VUE_APP_SSID,
-        password: process.env.VUE_APP_SSID_PASSWORD,
-        encryption: process.env.VUE_APP_SSID_ENCRYPTION,
+        ssid: this.config.ssid,
+        password: this.config.password,
+        encryption: this.config.encryption,
         hiddenSSID: false,
         outputFormat: { type: 'svg' }
     })
@@ -69,5 +69,5 @@ export default {
 }
 .qrcode {
   line-height: 0;
-}
+} 
 </style>

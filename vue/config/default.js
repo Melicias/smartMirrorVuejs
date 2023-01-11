@@ -26,7 +26,7 @@ let config = {
     //   },
     //   config: {},
     // },
-    {
+    /*{
       module: "NewsWidget",
       position: {
         x: 3,
@@ -37,7 +37,7 @@ let config = {
         height: 4,
       },
       config: {},
-    },
+    },*/
     {
       module: "WeatherWidget",
       position: {
@@ -60,7 +60,11 @@ let config = {
         width: 2,
         height: 5,
       },
-      config: {},
+      config: {
+        encryption: "WPA",
+        password: "H123456.",
+        ssid: "House 2G"
+      },
     },
     {
       module: "WaterWidget",
