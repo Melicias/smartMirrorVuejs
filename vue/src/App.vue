@@ -11,7 +11,7 @@
             </div>
           </div>
           <grid-layout
-            :layout="layout"
+            :layout="module.length != 0 ? layout : []"
             :col-num="this.col"
             :row-height="this.row"
             :is-draggable="draggable"
@@ -38,23 +38,34 @@
               <!--rowHeight: props.rowHeight-->
               <!--useCssTransforms: props.useCssTransforms-->
               <!--width: width.value-->
-              <grid-item
-                class="vue-grid-item"
-                v-for="item in module"
-                :key="item.index"
-                v-bind="gridItemProps"
-                :x="item.position.x"
-                :y="item.position.y"
-                :w="item.size.width"
-                :h="item.size.height"
-                :i="item.index"
-              >
-                <component
-                  :is="item.name"
-                  :config="item.config"
-                  :class="{ replaced: modules?.length >= 2 }"
-                ></component>
-              </grid-item>
+              <div v-if="module.length != 0">
+                <grid-item
+                  class="vue-grid-item"
+                  v-for="item in module"
+                  :key="item.index"
+                  v-bind="gridItemProps"
+                  :x="item.position.x"
+                  :y="item.position.y"
+                  :w="item.size.width"
+                  :h="item.size.height"
+                  :i="item.index"
+                >
+                  <component
+                    :is="item.name"
+                    :config="item.config"
+                    :class="{ replaced: modules?.length >= 2 }"
+                  ></component>
+                </grid-item>
+              </div>
+              <div v-else>
+                <div class="textContainer">
+                  <div class="box">
+                    <div class="box-content">
+                      <p>PLEASE ADD MODULES USING THE APP MOBILE</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </template>
           </grid-layout>
         </div>
@@ -149,9 +160,9 @@ export default {
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background:linear-gradient(#282828,#282828) center/2px 100% no-repeat;
+  background: linear-gradient(#282828, #282828) center/2px 100% no-repeat;
   grid-gap: 16px;
-  margin:5px;
+  margin: 5px;
 }
 
 .vue-grid-layout {
