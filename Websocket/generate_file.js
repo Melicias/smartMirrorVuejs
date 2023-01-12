@@ -12,6 +12,10 @@ const generateJsFile = async (userData) => {
   userTimeOut(userData.user_id);
 };
 
+const userTimed = async (userData) => {
+  userTimeOut(userData.user_id);
+};
+
 const isGenerateJsFile = (userData) => {
   if (fs.existsSync(join(path, userData.user_id + ".js"))) {
     return true

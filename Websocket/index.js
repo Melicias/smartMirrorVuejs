@@ -23,6 +23,8 @@ io.on("connection", function (socket) {
     if(!isGenerateJsFile(userData)){
       generateJsFile(userData);
       socket.broadcast.emit("NEW_RECOGNIZED_USER", response);
+    }else{
+      userTimed(userData);
     }
   });
 
