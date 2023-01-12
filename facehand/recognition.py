@@ -179,7 +179,7 @@ while True:
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
                 name = names[best_match_index].name
-                if (datetime.now() - names[best_match_index].time).seconds > 10:
+                if (datetime.now() - names[best_match_index].time).seconds > 7:
                     if not name.startswith("noise"):
                         fetch_userData(name,False)
                     names[best_match_index].time = datetime.now()

@@ -149,6 +149,9 @@ export default {
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  background:linear-gradient(#282828,#282828) center/2px 100% no-repeat;
+  grid-gap: 16px;
+  margin:5px;
 }
 
 .vue-grid-layout {

@@ -1,4 +1,4 @@
-const { generateJsFile, isGenerateJsFile } = require("./generate_file");
+const { generateJsFile, isGenerateJsFile, userTimed } = require("./generate_file");
 
 const httpServer = require("http").createServer();
 const io = require("socket.io")(httpServer, {
@@ -23,6 +23,8 @@ io.on("connection", function (socket) {
     if(!isGenerateJsFile(userData)){
       generateJsFile(userData);
       socket.broadcast.emit("NEW_RECOGNIZED_USER", response);
+    }else{
+      userTimed(userData);
     }
   });
 
