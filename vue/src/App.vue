@@ -2,62 +2,13 @@
   <body>
     <div :class="{ wrapper: modules?.length >= 2 }">
       <div v-for="message in modules" :key="message">
-        <div v-for="module in message" :key="module">
-          <div v-if="module.length != 0">
-            <div class="textContainer">
-              <div class="box">
-                <div class="box-content">
-                  <p>{{ module[0]?.owner }}</p>
-                </div>
+        <div v-for="(module, name) in message" :key="module">
+          <div class="textContainer">
+            <div class="box">
+              <div class="box-content">
+                <p>{{ name }}</p>
               </div>
             </div>
-            <grid-layout
-              :layout="layout"
-              :col-num="this.col"
-              :row-height="this.row"
-              :is-draggable="draggable"
-              :is-resizable="resizable"
-              :responsive="false"
-              :vertical-compact="false"
-              :prevent-collision="true"
-              :use-css-transforms="true"
-              :autoSize="true"
-              :margin="margin"
-              :is-bounded="true"
-            >
-              <template #default="{ gridItemProps }">
-                <!-- | gridItemProps props from GridLayout | -->
-                <!--breakpointCols: props.cols-->
-                <!--colNum: props.colNum-->
-                <!--containerWidth: width.value-->
-                <!--isDraggable: props.isDraggable-->
-                <!--isResizable: props.isResizable-->
-                <!--lastBreakpoint: lastBreakpoint.value-->
-                <!--margin: props.margin-->
-                <!--maxRows: props.maxRows-->
-                <!--responsive: props.responsive-->
-                <!--rowHeight: props.rowHeight-->
-                <!--useCssTransforms: props.useCssTransforms-->
-                <!--width: width.value-->
-                <grid-item
-                  class="vue-grid-item"
-                  v-for="item in module"
-                  :key="item.index"
-                  v-bind="gridItemProps"
-                  :x="item.position.x"
-                  :y="item.position.y"
-                  :w="item.size.width"
-                  :h="item.size.height"
-                  :i="item.index"
-                >
-                  <component
-                    :is="item.name"
-                    :config="item.config"
-                    :class="{ replaced: modules?.length >= 2 }"
-                  ></component>
-                </grid-item>
-              </template>
-            </grid-layout>
           </div>
           <grid-layout
             :layout="module.length != 0 ? layout : []"
@@ -102,15 +53,16 @@
                   <component
                     :is="item.name"
                     :config="item.config"
+                    :isReplaced="modules?.length >= 2"
                     :class="{ replaced: modules?.length >= 2 }"
                   ></component>
                 </grid-item>
               </div>
               <div v-else>
                 <div class="textContainer">
-                  <div class="box">
-                    <div class="box-content">
-                      <p>PLEASE ADD MODULES USING THE APP MOBILE</p>
+                  <div class="boxNoMod">
+                    <div class="box-contentNoMod">
+                      <p>PLEASE ADD MODULES USING THE MOBILE APP</p>
                     </div>
                   </div>
                 </div>
@@ -203,15 +155,39 @@ export default {
   text-transform: uppercase;
   text-align: center;
 }
+
+.boxNoMod {
+  position: absolute;
+  overflow: hidden;
+  left: 50%;
+  margin-top: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(240, 12, 12, 0); /* adjust transparency as needed */
+  border-radius: 10px; /* adjust as needed */
+  padding: 10px;
+  text-align: center;
+  /* adjust border as needed */
+
+  /* adjust border width as needed */
+}
+
+.box-contentNoMod {
+  color: rgb(188, 188, 188);
+  top: 50%;
+  opacity: 0.8; /* adjust color as needed */
+  font-size: 20px; /* adjust as needed */
+  font-weight: bold; /* adjust as needed */
+  text-transform: uppercase;
+  text-align: center;
+}
 .replaced {
-  transform: scale(0.5);
+  transform: scale(0.5)!important;
 }
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
   background: linear-gradient(#282828, #282828) center/2px 100% no-repeat;
-  grid-gap: 16px;
-  margin: 5px;
+  grid-gap: 50px;
 }
 
 .vue-grid-layout {

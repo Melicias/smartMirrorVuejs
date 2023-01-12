@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" id="app">
+  <div class="container wrapper" id="app" :class="{ replaced: isReplaced }">
     <div class="player">
       <div class="player__top">
         <div class="player-cover">
@@ -173,6 +173,10 @@ export default {
   name: "SpotifyPlayer",
   props: {
     config: {},
+    isReplaced: {
+      type: Boolean,
+      default: false,
+    },
   },
   import: [],
   data() {
@@ -413,13 +417,17 @@ export default {
   fill: currentColor;
 }
 
+.replaced {
+  transform: scale(0.5)!important;
+}
+
 .player {
   box-sizing: border-box;
   margin: auto;
   background: transparent;
 
   width: 260px;
-  min-height: 330px;
+  height: 330px;
   // box-shadow: 0px 55px 75px -10px rgba(76, 70, 124, 0.5);
   // box-shadow: 0px 55px 105px 10px rgba(76, 70, 124, 0.35);
   box-shadow: 0px 5px 15px -5px rgba(255, 255, 255, 0.32);
@@ -428,7 +436,7 @@ export default {
   @media screen {
     padding: 20px;
     margin-top: 75px;
-    min-height: initial;
+    height: initial;
     padding-bottom: 30px;
     max-width: 400px;
   }
@@ -645,10 +653,10 @@ export default {
     font-size: 20px;
     opacity: 0.7;
     line-height: 1.3em;
-    min-height: 52px;
+    height: 52px;
     @media screen {
       font-size: 18px;
-      min-height: 50px;
+      height: 50px;
     }
   }
 }

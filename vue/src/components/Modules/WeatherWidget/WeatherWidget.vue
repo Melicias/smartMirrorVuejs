@@ -8,6 +8,7 @@
         positionstackApi="00d723792211b93a60ad2af7d349ce47"
         v-bind:hide-header="false"
         language="en"
+        :class="{ replaced: isReplaced }"
     />
 </template>
 
@@ -18,6 +19,10 @@
     name: 'App',
     props: {
       config: {},
+      isReplaced: {
+        type: Boolean,
+        default: false,
+      },
     },
     import:[VueWeather],
     data () {
@@ -31,5 +36,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.replaced {
+  transform: scale(0.5)!important;
+}
 </style>
