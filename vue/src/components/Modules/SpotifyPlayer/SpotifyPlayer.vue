@@ -191,7 +191,7 @@ export default {
             "https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/1.jpg",
           source:
             "https://raw.githubusercontent.com/muhammederdem/mini-player/master/mp3/1.mp3",
-          url: "https://www.youtube.com/watch?v=z3wAjJXbYzA",
+          url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
           favorited: false,
         },
         {
@@ -221,7 +221,7 @@ export default {
             "https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/4.jpg",
           source:
             "https://raw.githubusercontent.com/muhammederdem/mini-player/master/mp3/4.mp3",
-          url: "https://www.youtube.com/watch?v=kYgGwWYOd9Y",
+          url: "https://www.youtube.com/watch?v=SxNkilmoArU",
           favorited: false,
         },
         {
@@ -231,7 +231,7 @@ export default {
             "https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/5.jpg",
           source:
             "https://raw.githubusercontent.com/muhammederdem/mini-player/master/mp3/5.mp3",
-          url: "https://www.youtube.com/watch?v=0WlpALnQdN8",
+          url: "https://www.youtube.com/watch?v=OwrJGNME_no",
           favorited: true,
         },
         {

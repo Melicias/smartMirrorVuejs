@@ -24,8 +24,8 @@
         additionalPhrases: [],
         startTime: "00:00",
         endTime: "23:59",
-        messageDuration: 2 * 60 * 1000, // 2 min showing on the screen
-        reminderFrequency: 60 * 60 * 1000, // hourly reminder
+        messageDuration: 0.5 * 60 * 1000, // 2 min showing on the screen
+        reminderFrequency: 1000 * (this.config.reminderFrequency ? this.config.reminderFrequency : 60*60), // hourly reminder
         days: [0,1,2,3,4,5,6],
         alarm: {
           status: false, 
