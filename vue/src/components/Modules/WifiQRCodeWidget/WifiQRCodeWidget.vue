@@ -33,9 +33,9 @@ export default {
   },
   created() {
     this.data=generateWifiQRCode({
-        ssid: this.config.ssid,
-        password: this.config.password,
-        encryption: this.config.encryption,
+        ssid: this.config.ssid ?? "Insert ssid",
+        password: this.config.password ?? "",
+        encryption: this.config.encryption ?? "",
         hiddenSSID: false,
         outputFormat: { type: 'svg' }
     })

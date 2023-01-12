@@ -81,4 +81,4 @@ const userTimeOut = (user_id) => {
   timeOut.push({ key: user_id, timer: auxtimeOut });
 };
 
-module.exports = { generateJsFile, isGenerateJsFile };
+module.exports = { generateJsFile, isGenerateJsFile, userTimed };

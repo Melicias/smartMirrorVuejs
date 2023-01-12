@@ -111,11 +111,14 @@ export default {
         });
     },
     next: function () {
-      console.log("next");
-      this.$refs.splide.go(">");
+      if(this.$refs.splide != undefined){
+        this.$refs.splide.go(">");
+      }
     },
     previous: function () {
-      this.$refs.splide.go("<");
+      if(this.$refs.splide != undefined){
+        this.$refs.splide.go("<");
+        }
     },
     changeNews: function () {
       //funcao para ir bsucar as noticias
