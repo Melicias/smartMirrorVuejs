@@ -48,7 +48,13 @@ let config = {
         width: 9,
         height: 6,
       },
-      config: {},
+      config: {
+        longitude: "-8.821209",
+        latitude: "39.734097",
+        //longitude: "-8.250263",
+        //latitude: "37.093264",
+        apiKey:""
+      },
     },
     {
       module: "generateWifiQRCode",
@@ -76,7 +82,9 @@ let config = {
         width: 12,
         height: 1,
       },
-      config: {},
+      config: {
+        reminderFrequency: "20"
+      },
     },
   ],
 };
