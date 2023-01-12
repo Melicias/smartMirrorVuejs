@@ -16,6 +16,8 @@ import filecmp
 from trainDef import *
 
 # To download the images
+
+
 def download_image_to_train(user_id):
     # Obter a referencia da imagem
     blob = bucket.blob('images/'+user_id+'.png')
@@ -27,25 +29,28 @@ def download_image_to_train(user_id):
         os.makedirs(folder_path)
     image_path_old = f'{folder_path}/0.png'
     image_path = f'{folder_path}/01.png'
-    
+
     if not blob.exists():
         return
     blob.download_to_filename(image_path)
-    
+
     if not os.path.isfile(image_path_old):
-        #trocar o nome do ficheiro
+        # trocar o nome do ficheiro
         os.rename(image_path, image_path_old)
         train(False)
     else:
         if not filecmp.cmp(image_path_old, image_path):
-            #trocar o nome do ficheiro
+            # trocar o nome do ficheiro
             os.rename(image_path, image_path_old)
             train(False)
         else:
             print("descarregar ficheiro")
-            fetch_userData(user_id,True) #so fazer isto caso o ficheiro exista?! senao ele cria na mesma
+            # so fazer isto caso o ficheiro exista?! senao ele cria na mesma
+            fetch_userData(user_id, True)
 
 # Create a callback on_snapshot function to capture changes
+
+
 def on_snapshot(col_snapshot, changes, read_time):
     for change in changes:
         if change.type.name == 'ADDED':
@@ -65,7 +70,9 @@ def on_snapshot(col_snapshot, changes, read_time):
             # chamar funcao para apagar os dados de imagem
 
 # Socket notification that user is on FR
-def fetch_userData(user_id,isUpdate):
+
+
+def fetch_userData(user_id, isUpdate):
     doc = col_query.document(user_id).get()
     doc_dict = doc.to_dict()
     print(user_id)
@@ -75,6 +82,7 @@ def fetch_userData(user_id,isUpdate):
         sio.emit('NEW_RECOGNIZED_USER_FOR_UPDATE', json_object)
     else:
         sio.emit('NEW_RECOGNIZED_USER', json_object)
+
 
 def declareFaces():
     global picleDir, encodings, names_raw, names
@@ -88,6 +96,7 @@ def declareFaces():
     for n in names_raw:
         names.append(Name(n))
 
+
 class Name:
     name = ''
     time = ''
@@ -95,6 +104,7 @@ class Name:
     def __init__(self, name):
         self.name = name
         self.time = datetime.now()
+
 
 # main
 sio = socketio.Client()
@@ -123,10 +133,17 @@ query_watch = col_query.on_snapshot(on_snapshot)
 video_capture = cv2.VideoCapture(0)
 
 # Create arrays of known face encodings and their names
-picleDir = 'pickleData/'; encodings = []; names_raw = []; names = []
+picleDir = 'pickleData/'
+encodings = []
+names_raw = []
+names = []
 declareFaces()
 # Initialize some variables
-face_locations = []; face_encodings = []; face_names = []; process_this_frame = 0; returned = False
+face_locations = []
+face_encodings = []
+face_names = []
+process_this_frame = 0
+returned = False
 
 while True:
     # Grab a single frame of video
@@ -149,34 +166,48 @@ while True:
 
         # Find all the faces and face encodings in the current frame of video
         face_locations = face_recognition.face_locations(rgb_small_frame)
-        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+        face_locations = sorted(face_locations, key=lambda x: x[2])[:2]
+        face_encodings = face_recognition.face_encodings(
+            rgb_small_frame, face_locations)
         face_names = []
+        facesCounter = 0
         for face_encoding in face_encodings:
+            if facesCounter >= 2:
+                break
+
             matches = face_recognition.compare_faces(encodings, face_encoding)
             name = "Unknown"
             # Or instead, use the known face with the smallest distance to the new face
-            face_distances = face_recognition.face_distance(encodings, face_encoding)
+            face_distances = face_recognition.face_distance(
+                encodings, face_encoding)
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
                 name = names[best_match_index].name
+                if not name.startswith("noise") or not name == "Unknown":
+                    facesCounter += 1
                 if (datetime.now() - names[best_match_index].time).seconds > 10:
                     if not name.startswith("noise"):
-                        fetch_userData(name,False)
+                        fetch_userData(name, False)
                     names[best_match_index].time = datetime.now()
             face_names.append(name)
 
     # Display the results
     for (top, right, bottom, left), name in zip(face_locations, face_names):
         # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4; right *= 4; bottom *= 4; left *= 4
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
 
         # Draw a box around the face
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
         # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 35),(right, bottom), (0, 0, 255), cv2.FILLED)
+        cv2.rectangle(frame, (left, bottom - 35),
+                      (right, bottom), (0, 0, 255), cv2.FILLED)
         font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6),font, 1.0, (255, 255, 255), 1)
+        cv2.putText(frame, name, (left + 6, bottom - 6),
+                    font, 1.0, (255, 255, 255), 1)
 
     # Display the resulting image
     cv2.imshow('Video', frame)
