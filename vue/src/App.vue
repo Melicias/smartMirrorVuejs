@@ -3,6 +3,13 @@
     <div :class="{ wrapper: modules?.length >= 2 }">
       <div v-for="message in modules" :key="message">
         <div v-for="module in message" :key="module">
+          <div class="textContainer">
+            <div class="box">
+              <div class="box-content">
+                <p>{{ module[0]?.owner }}</p>
+              </div>
+            </div>
+          </div>
           <grid-layout
             :layout="layout"
             :col-num="this.col"
@@ -81,6 +88,7 @@ export default {
   },
   created() {
     this.modules = Loader()();
+    console.log(this.modules);
     this.modules.forEach((module) => {
       for (let key in module) {
         module[key].forEach((x) => {
@@ -110,6 +118,31 @@ export default {
 </script>
 
 <style scoped>
+.textContainer {
+  position: relative;
+}
+.box {
+  position: absolute;
+  overflow: hidden;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(240, 12, 12, 0); /* adjust transparency as needed */
+  border-radius: 10px; /* adjust as needed */
+  padding: 10px;
+  text-align: center;
+  /* adjust border as needed */
+
+  /* adjust border width as needed */
+}
+
+.box-content {
+  color: rgb(80, 77, 77);
+  opacity: 0.8; /* adjust color as needed */
+  font-size: 15px; /* adjust as needed */
+  font-weight: bold; /* adjust as needed */
+  text-transform: uppercase;
+  text-align: center;
+}
 .replaced {
   transform: scale(0.5);
 }
