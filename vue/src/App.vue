@@ -3,12 +3,61 @@
     <div :class="{ wrapper: modules?.length >= 2 }">
       <div v-for="message in modules" :key="message">
         <div v-for="module in message" :key="module">
-          <div class="textContainer">
-            <div class="box">
-              <div class="box-content">
-                <p>{{ module[0]?.owner }}</p>
+          <div v-if="module.length != 0">
+            <div class="textContainer">
+              <div class="box">
+                <div class="box-content">
+                  <p>{{ module[0]?.owner }}</p>
+                </div>
               </div>
             </div>
+            <grid-layout
+              :layout="layout"
+              :col-num="this.col"
+              :row-height="this.row"
+              :is-draggable="draggable"
+              :is-resizable="resizable"
+              :responsive="false"
+              :vertical-compact="false"
+              :prevent-collision="true"
+              :use-css-transforms="true"
+              :autoSize="true"
+              :margin="margin"
+              :is-bounded="true"
+            >
+              <template #default="{ gridItemProps }">
+                <!-- | gridItemProps props from GridLayout | -->
+                <!--breakpointCols: props.cols-->
+                <!--colNum: props.colNum-->
+                <!--containerWidth: width.value-->
+                <!--isDraggable: props.isDraggable-->
+                <!--isResizable: props.isResizable-->
+                <!--lastBreakpoint: lastBreakpoint.value-->
+                <!--margin: props.margin-->
+                <!--maxRows: props.maxRows-->
+                <!--responsive: props.responsive-->
+                <!--rowHeight: props.rowHeight-->
+                <!--useCssTransforms: props.useCssTransforms-->
+                <!--width: width.value-->
+                <grid-item
+                  class="vue-grid-item"
+                  v-for="item in module"
+                  :key="item.index"
+                  v-bind="gridItemProps"
+                  :x="item.position.x"
+                  :y="item.position.y"
+                  :w="item.size.width"
+                  :h="item.size.height"
+                  :i="item.index"
+                >
+                  <component
+                    :is="item.name"
+                    :config="item.config"
+                    :class="{ replaced: modules?.length >= 2 }"
+                  ></component>
+                </grid-item>
+              </template>
+            </grid-layout>
           </div>
           <grid-layout
             :layout="module.length != 0 ? layout : []"
