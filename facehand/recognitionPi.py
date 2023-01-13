@@ -17,6 +17,7 @@ from trainDef import *
 import mediapipe as mp
 import time
 import math
+import shutil
 
 # To download the images
 def download_image_to_train(user_id):
@@ -48,6 +49,22 @@ def download_image_to_train(user_id):
             print("descarregar ficheiro")
             fetch_userData(user_id,True) #so fazer isto caso o ficheiro exista?! senao ele cria na mesma
 
+# To remove the images
+def remove_file_user(user_id):
+    # Download
+    local_folder = './images_input'
+    folder_path = f'{local_folder}/{user_id}'
+    if not os.path.exists(folder_path):
+        return
+    
+    try:
+        shutil.rmtree(folder_path)
+        print("directory is deleted")
+        train(False)
+    except OSError as x:
+        print("Error occured: %s : %s" % (folder_path, x.strerror))
+        return
+
 # Create a callback on_snapshot function to capture changes
 def on_snapshot(col_snapshot, changes, read_time):
     for change in changes:
@@ -65,6 +82,10 @@ def on_snapshot(col_snapshot, changes, read_time):
 
         elif change.type.name == 'REMOVED':
             print(f'Removed user: {change.document.id}')
+            modifiying.set()
+            remove_file_user(change.document.id)
+            modifiying.clear()
+            print("removed user")
             # chamar funcao para apagar os dados de imagem
 
 # Socket notification that user is on FR
@@ -162,7 +183,10 @@ while True:
         face_locations = face_recognition.face_locations(rgb_small_frame)
         face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
         face_names = []
+        facesCounter = 0
         for face_encoding in face_encodings:
+            if facesCounter >= 2:
+                break
             matches = face_recognition.compare_faces(encodings, face_encoding)
             name = "Unknown"
             # Or instead, use the known face with the smallest distance to the new face
@@ -170,6 +194,8 @@ while True:
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
                 name = names[best_match_index].name
+                if not name.startswith("noise") or not name == "Unknown":
+                    facesCounter += 1
                 if (datetime.now() - names[best_match_index].time).seconds > 10:
                     if not name.startswith("noise"):
                         fetch_userData(name,False)

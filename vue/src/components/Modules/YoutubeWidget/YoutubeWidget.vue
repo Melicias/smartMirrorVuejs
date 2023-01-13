@@ -21,8 +21,8 @@ export default {
   },
   data() {
     return {
-      temp: { video_id: "vFU92ho_Q4Y", loop: 1 },
-      play : { video_id: "vFU92ho_Q4Y", loop: 1 },
+      temp: { video_id: this.config.urlid, loop: 1 },
+      play : { video_id: this.config.urlid, loop: 1 },
       visibilityHidden: ""
     }
   },
@@ -51,6 +51,9 @@ export default {
     onPlayed() {
       console.log("## OnPlayed")
     },
+  },
+  onLoad(){
+    this.$refs.youtube.player.playVideo();
   }
 }
 </script>
