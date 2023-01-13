@@ -26,7 +26,7 @@ let config = {
     //   },
     //   config: {},
     // },
-    /*{
+    {
       module: "NewsWidget",
       position: {
         x: 3,
@@ -37,7 +37,7 @@ let config = {
         height: 4,
       },
       config: {},
-    },*/
+    },
     {
       module: "WeatherWidget",
       position: {

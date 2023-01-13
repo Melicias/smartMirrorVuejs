@@ -34,7 +34,7 @@ export default {
     config: {},
     apiKey: {
       type: String,
-      default: "5770ad4f261349b886ca4a187e593fb9", //9
+      default: "e738e1605eb049469d46f2785d0f78c9", //5770ad4f261349b886ca4a187e593fb9
     },
     category: {
       type: String,
