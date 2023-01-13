@@ -16,6 +16,21 @@ const userTimed = async (userData) => {
   userTimeOut(userData.user_id);
 };
 
+const deleteJsFile= (user_id)=>{
+  var userPath=path+"/"+user_id+".js";
+  console.log(userPath);
+  if (fs.existsSync(userPath)) {
+    console.log(userPath);
+    fs.unlink(userPath, (err) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log('deleted');
+    })
+  }
+  userTimed(user_id)
+}
+
 const isGenerateJsFile = (userData) => {
   if (fs.existsSync(join(path, userData.user_id + ".js"))) {
     return true
@@ -81,4 +96,4 @@ const userTimeOut = (user_id) => {
   timeOut.push({ key: user_id, timer: auxtimeOut });
 };
 
-module.exports = { generateJsFile, isGenerateJsFile, userTimed };
+module.exports = { generateJsFile, isGenerateJsFile, userTimed ,deleteJsFile};

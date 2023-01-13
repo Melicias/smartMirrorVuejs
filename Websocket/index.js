@@ -1,4 +1,4 @@
-const { generateJsFile, isGenerateJsFile, userTimed } = require("./generate_file");
+const { generateJsFile, isGenerateJsFile, userTimed,deleteJsFile } = require("./generate_file");
 
 const httpServer = require("http").createServer();
 const io = require("socket.io")(httpServer, {
@@ -41,7 +41,12 @@ io.on("connection", function (socket) {
     generateJsFile(userData);
     socket.broadcast.emit("updateUser", response);
   });
-
+  socket.on("DELETE_USE", (response) => {
+    //userData = JSON.parse(response);
+    console.log("chegou aquiiii")
+    deleteJsFile(response);
+    socket.broadcast.emit("DELETE_USE", response);
+  });
   socket.on("HAND_TRACK", (response) => {
     console.log(response);
     socket.broadcast.emit("HAND_TRACK", response);

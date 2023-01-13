@@ -88,6 +88,7 @@ def on_snapshot(col_snapshot, changes, read_time):
             remove_file_user(change.document.id)
             modifiying.clear()
             print("removed user")
+            sio.emit('DELETE_USE',change.document.id)
             # chamar funcao para apagar os dados de imagem
 
 # Socket notification that user is on FR
